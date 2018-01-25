@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { WordsService } from '../words.service';
+
 @Component({
   selector: 'mw-words-collection',
   templateUrl: './words-collection.component.html',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WordsCollectionComponent implements OnInit {
 
-  constructor() { }
+  words: any = [];
 
-  ngOnInit() {
+  constructor(private wordsService: WordsService) {
+
+  }
+
+  ngOnInit(): void {
+    window['W'] = this.wordsService;
+    this.wordsService.getWords(
+      { skip: 0, limit: 10 },
+      {},
+      {}
+    ).subscribe(res => this.words = res.data);
   }
 
 }

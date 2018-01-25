@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CardModule } from 'primeng/card';
 import { MessagesModule } from 'primeng/messages';
+import { TableModule } from 'primeng/table';
 
 import { WordsRoutingModule } from './words-routing.module';
 import { WordsComponent } from './words.component';
@@ -11,10 +12,13 @@ import { WordsCollectionComponent } from './words-collection/words-collection.co
 import { RepeatWordsComponent } from './repeat-words/repeat-words.component';
 import { RandomWordComponent } from './random-word/random-word.component';
 
+import { WordsService } from './words.service';
+
 const primeNgModules = [
   TabMenuModule,
   CardModule,
-  MessagesModule
+  MessagesModule,
+  TableModule
 ];
 
 @NgModule({
@@ -23,6 +27,14 @@ const primeNgModules = [
     ...primeNgModules,
     WordsRoutingModule
   ],
-  declarations: [WordsComponent, WordsCollectionComponent, RepeatWordsComponent, RandomWordComponent]
+  declarations: [
+    WordsComponent, 
+    WordsCollectionComponent, 
+    RepeatWordsComponent, 
+    RandomWordComponent
+  ],
+  providers: [
+    WordsService
+  ]
 })
 export class WordsModule { }

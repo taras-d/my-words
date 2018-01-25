@@ -1,1 +1,16 @@
-Words collection
+<p-table [value]="words">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Word</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-word>
+        <tr>
+            <td>{{word.text}}</td>
+            <td>{{word.createdAt}}</td>
+            <td>{{word.updatedAt}}</td>
+        </tr>
+    </ng-template>
+</p-table>
