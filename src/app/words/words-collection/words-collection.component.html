@@ -1,33 +1,39 @@
-
-<!-- Table -->
 <p-table 
     [value]="words" 
-    [loading]="loading">
+    [loading]="loading"
+    [lazy]="true"
+    [paginator]="true"
+    [first]="paging.skip"
+    [rows]="paging.limit"
+    [totalRecords]="paging.total"
+    (onLazyLoad)="onLazyLoad($event)"
+    (onRowClick)="onRowClick($event)">
     <ng-template pTemplate="header">
         <tr>
             <th>Word</th>
-            <th>Created at</th>
-            <th>Updated at</th>
+            <th>Translation</th>
+            <th>Date</th>
+            <th style="width: 100px;"></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-word>
         <tr>
             <td>{{word.text}}</td>
-            <td>{{word.createdAt}}</td>
-            <td>{{word.updatedAt}}</td>
+            <td>{{word.translation}}</td>
+            <td [title]="word.updatedAt">{{word.relativeDate}}</td>
+            <td style="text-align: right;">
+                <p-button (onClick)="onEditWord(word)" icon="fa fa-fw fa-edit" styleClass="ui-button-secondary"></p-button>
+                <p-button (onClick)="onRemoveWord(word)" icon="fa fa-fw fa-times" styleClass="ui-button-secondary"></p-button>
+            </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="3">No words</td>
+            <td colspan="4">No words</td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="summary">
+        <span class="total">Total words: {{paging.total}}</span>
+        <p-button label="Add word" icon="fa fa-fw fa-check" (click)="onWordAdd()"></p-button>
+    </ng-template>
 </p-table>
-
-<!-- Paginator -->
-<p-paginator 
-    [first]="paging.skip" 
-    [rows]="paging.limit" 
-    [totalRecords]="paging.total"
-    (onPageChange)="onPageChange($event)">
-</p-paginator>

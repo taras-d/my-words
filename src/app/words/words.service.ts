@@ -1,6 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
 import { DBService, DBConnection } from '../core/db.service';
 
@@ -9,7 +10,8 @@ export interface Word {
     text: string,
     translation?: string,
     createdAt?: Date,
-    updatedAt?: Date
+    updatedAt?: Date,
+    relativeDate?: string
 };
 
 export interface WordsResponse {
@@ -64,6 +66,10 @@ export class WordsService {
             }
 
             return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
+                res.rows.forEach(row => {
+                    row.relativeDate = moment( new Date(row.updatedAt) ).fromNow();
+                });
+
                 return {
                     skip: query.offset,
                     limit: query.limit,
