@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -35,9 +35,9 @@ export class WordsService {
     }
 
     getWords(
-        paging: { skip: number, limit: number },
-        filter: { [key: string]: any },
-        sort: { column: string, order: number }[]
+        paging?: { skip: number, limit: number },
+        filter?: { [key: string]: any },
+        sort?: { column: string, order: number }[]
     ): Observable<WordsResponse> {
         return this.getDB().mergeMap(conn => {
             const query: any = {
@@ -110,7 +110,7 @@ export class WordsService {
     }
 
     private toObs(promise: Promise<any>): Observable<any> {
-        return Observable.fromPromise(promise);
+        return this.dbService.primiseToObservable(promise);
     }
 
 } 

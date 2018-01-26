@@ -5,6 +5,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { CardModule } from 'primeng/card';
 import { MessagesModule } from 'primeng/messages';
 import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { WordsRoutingModule } from './words-routing.module';
 import { WordsComponent } from './words.component';
@@ -18,7 +19,8 @@ const primeNgModules = [
   TabMenuModule,
   CardModule,
   MessagesModule,
-  TableModule
+  TableModule,
+  PaginatorModule
 ];
 
 @NgModule({
