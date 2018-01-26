@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron-app": "electron ."
+    "electron-app": "electron .",
+    "electron-rebuild": "electron-rebuild",
+    "sequelize": "sequelize"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +26,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "core-js": "^2.4.1",
+    "electron-rebuild": "^1.7.3",
     "font-awesome": "^4.7.0",
     "primeng": "^5.2.0-rc.2",
     "rxjs": "^5.5.6",
