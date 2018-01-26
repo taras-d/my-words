@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
+
+import { DBService, DBConnection } from '../core/db.service';
 
 export interface Word {
     id?: string,
     text: string,
+    translation?: string,
     createdAt?: Date,
     updatedAt?: Date
 };
@@ -18,55 +19,98 @@ export interface WordsResponse {
     data: Word[]
 };
 
-const words: Word[] = [];
-for (let i = 0; i < 10; ++i) {
-    words.push({ id: `${i}`, text: `Word ${i}`, createdAt: new Date(), updatedAt: new Date() });
-}
 
 @Injectable()
 export class WordsService {
 
+    constructor(private dbService: DBService) {
+        
+    }
+
     createWord(word: Word): Observable<Word> {
-        words.push(word);
-        return of(word);
+        return this.getDB().mergeMap(conn => {
+            return this.toObs( conn.words.create(word) )
+                .map((model: any) => model.dataValues);
+        });
     }
 
     getWords(
         paging: { skip: number, limit: number },
         filter: { [key: string]: any },
-        sort: { [key: string]: any }
+        sort: { column: string, order: number }[]
     ): Observable<WordsResponse> {
-        const result = {
-            skip: paging.skip,
-            limit: paging.limit,
-            total: words.length,
-            data: words.slice(paging.skip, paging.skip + paging.limit)
-        } as WordsResponse
-        return of(result);
+        return this.getDB().mergeMap(conn => {
+            const query: any = {
+                raw: true,
+                order: []
+            };
+
+            paging = paging || {} as any;
+            query.offset = paging.skip || 0;
+            query.limit = paging.limit || 10;
+
+            if (filter) {
+                for (let column in filter) {
+
+                }
+            }
+
+            if (sort) {
+                sort.forEach(item => {
+                    if (item.order) {
+                        query.order.push([item.column, item.order === 1? 'ASC': 'DESC'])
+                    }
+                });
+            }
+
+            return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
+                return {
+                    skip: query.offset,
+                    limit: query.limit,
+                    total: res.count,
+                    data: res.rows
+                };
+            });
+        });
     }
 
     getRandomWord(): Observable<Word> {
-        return of( words[ Math.floor(Math.random() * words.length) ] );
+        return this.getDB().mergeMap(conn => {
+            return this.toObs( 
+                conn.sequelize.query('SELECT * FROM words ORDER BY RANDOM() LIMIT 1')
+            ).map((response: any) => response[0][0] || null);
+        });
     }
 
     updateWord(id: string, word: Word): Observable<Word> {
-        const index = words.findIndex(word => word.id === id);
-        if (index !== -1) {
-            words[index] = word;
-            return of(word);
-        } else {
-            return _throw('Not found');
-        }
+        return this.getDB()
+            .mergeMap(conn => {
+                return this.toObs( conn.words.findById(id) );
+            })
+            .mergeMap((model: any) => {
+                return model? Observable.of(model): 
+                    Observable.throw(`Word with id "${id}" not found`);
+            })
+            .mergeMap((model: any) => {
+                return this.toObs( model.update(word) )
+                    .map((model: any) => model.dataValues);
+            });
     }
     
     deleteWord(id: string): Observable<null> {
-        const index = words.findIndex(word => word.id === id);
-        if (index !== -1) {
-            words.splice(index, 1);
-            return of(null);
-        } else {
-            return _throw('Not found');
-        }
+        return this.getDB().mergeMap(conn => {
+            return this.toObs( 
+                conn.words.destroy({ where: { id } })
+            ).mapTo(null);
+        });
+    }
+
+    private getDB(): Observable<DBConnection> {
+        return this.dbService.getConnection();
+    }
+
+    private toObs(promise: Promise<any>): Observable<any> {
+        return Observable.fromPromise(promise);
     }
 
 } 
