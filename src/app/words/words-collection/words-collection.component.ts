@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
-import { RequestHelper } from '../../core/utils';
+import { RequestHelper, openInGoogleTranslate } from '../../core/utils';
 
 @Component({
   selector: 'mw-words-collection',
@@ -92,5 +92,9 @@ export class WordsCollectionComponent implements OnInit {
       message: `Are you really want to delete word "${word.text}"?`,
       accept: () => this.request.invoke('deleteWord', word.id)
     });
+  }
+
+  onOpenInGoogleTranslate(word: Word): void {
+    openInGoogleTranslate(word.text);
   }
 }
