@@ -44,26 +44,28 @@ export class WordsService {
         return this.getDB().mergeMap(conn => {
             const query: any = {
                 raw: true,
-                order: []
+                order: [
+                    ['updatedAt', 'DESC']
+                ]
             };
 
             paging = paging || {} as any;
             query.offset = paging.skip || 0;
             query.limit = paging.limit || 10;
 
-            if (filter) {
-                for (let column in filter) {
+            // if (filter) {
+            //     for (let column in filter) {
 
-                }
-            }
+            //     }
+            // }
 
-            if (sort) {
-                sort.forEach(item => {
-                    if (item.order) {
-                        query.order.push([item.column, item.order === 1? 'ASC': 'DESC'])
-                    }
-                });
-            }
+            // if (sort) {
+            //     sort.forEach(item => {
+            //         if (item.order) {
+            //             query.order.push([item.column, item.order === 1? 'ASC': 'DESC'])
+            //         }
+            //     });
+            // }
 
             return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
                 res.rows.forEach(row => {

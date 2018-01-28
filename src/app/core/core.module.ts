@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { MessageService } from 'primeng/components/common/messageservice';
+
 import { DBService } from './db.service';
 
 @NgModule({
@@ -8,7 +10,8 @@ import { DBService } from './db.service';
     CommonModule
   ],
   providers: [
-    DBService
+    DBService,
+    MessageService
   ],
   declarations: []
 })

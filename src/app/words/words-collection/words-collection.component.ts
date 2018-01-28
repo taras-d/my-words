@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { MessageService } from 'primeng/components/common/messageservice';
+
 import { WordsService, Word } from '../words.service';
-import { debug } from 'util';
+import * as utils from '../../core/utils';
+import { RequestHelper } from '../../core/utils';
 
 @Component({
   selector: 'mw-words-collection',
@@ -17,37 +20,63 @@ export class WordsCollectionComponent implements OnInit {
   
   words: Word[];
 
-  constructor(private wordsService: WordsService) {
-    
+  request = new utils.RequestHelper({
+    fail: (method, error) => this.messageService.add({
+      severity: 'error', detail: error.message
+    })
+  });
+
+  constructor(
+    private wordsService: WordsService,
+    private messageService: MessageService
+  ) {
+
+    this.request.method('getWords', {
+      create: () => {
+        this.loading = true;
+        return this.wordsService.getWords(this.paging);
+      },
+      done: result => {
+        this.loading = false;
+        this.words = result.data;
+        this.paging = {
+          skip: result.skip, 
+          limit: result.limit, 
+          total: result.total
+        };
+      }
+    });
+
+    this.request.method('deleteWord', {
+      create: id => {
+        this.loading = true;
+        return this.wordsService.deleteWord(id);
+      },
+      done: () => {
+        const { paging } = this;
+        if (this.words.length === 1 && paging.skip > 0) {
+          paging.skip = paging.skip - paging.limit;
+        }
+        this.request.invoke('getWords');
+      }
+    });
   }
 
   ngOnInit(): void {
 
   }
 
-  loadWords(): void {
-    this.loading = true;
-    this.wordsService.getWords(this.paging).subscribe(res => {
-      this.loading = false;
-      this.words = res.data;
-      this.paging = {
-        skip: res.skip, 
-        limit: res.limit, 
-        total: res.total
-      };
-    });
+  ngOnDestroy(): void {
+    this.request.cancelAll();
   }
 
   onLazyLoad(event): void {
     this.paging.skip = event.first;
-    this.loadWords();
+    this.request.invoke('getWords');
   }
 
   onWordAdd(): void {
-    this.loading = true;
-    this.wordsService.createWord({ text: 'Test word ' + new Date().getTime() }).subscribe(() => {
-      this.loadWords();
-    });
+    
   }
 
   onRowClick(): void {
@@ -59,7 +88,7 @@ export class WordsCollectionComponent implements OnInit {
   }
 
   onRemoveWord(word: Word): void {
-    this.wordsService.deleteWord(word.id).subscribe(() => this.loadWords());
+    this.request.invoke('deleteWord', word.id);
   }
 
 }
