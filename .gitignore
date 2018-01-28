@@ -42,4 +42,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
-db/data.sqlite
+db/*.sqlite

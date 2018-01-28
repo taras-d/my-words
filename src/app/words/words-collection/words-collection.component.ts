@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
 import { RequestHelper, openInGoogleTranslate } from '../../core/utils';
+
+import { WordEditComponent } from '../word-edit/word-edit.component';
 
 @Component({
   selector: 'mw-words-collection',
@@ -14,6 +16,8 @@ import { RequestHelper, openInGoogleTranslate } from '../../core/utils';
   providers: [ConfirmationService]
 })
 export class WordsCollectionComponent implements OnInit {
+
+  @ViewChild(WordEditComponent) wordEditCmp: WordEditComponent;
 
   loading: boolean = true;
 
@@ -80,11 +84,15 @@ export class WordsCollectionComponent implements OnInit {
   }
 
   onWordAdd(): void {
-    this.wordsService.createWord({ text: 'Test word' }).subscribe(() => this.request.invoke('getWords'));
+    this.wordEditCmp.open({} as Word);
   }
 
-  onWordEdit(): void {
+  onWordEdit(word: Word): void {
+    this.wordEditCmp.open(word);
+  }
 
+  onWordSaved(word: Word): void {
+    this.request.invoke('getWords');
   }
 
   onWordDelete(word: Word): void {

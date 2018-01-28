@@ -1,7 +1,7 @@
 module.exports = {
   development: {
     dialect: 'sqlite',
-    storage: 'db/data.sqlite',
+    storage: 'db/dev.sqlite',
     migrationStorageTableName: '_migrations'
   }
 };

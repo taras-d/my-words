@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    translate: {
+    translation: {
       type: DataTypes.STRING,
       allowNull: true
     }

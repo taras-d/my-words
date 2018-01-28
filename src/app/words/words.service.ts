@@ -10,8 +10,9 @@ export interface Word {
     text: string,
     translation?: string,
     createdAt?: Date,
+    createdAtRelative?: Date,
     updatedAt?: Date,
-    relativeDate?: string
+    updatedAtRelative?: Date
 };
 
 export interface WordsResponse {
@@ -69,7 +70,8 @@ export class WordsService {
 
             return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
                 res.rows.forEach(row => {
-                    row.relativeDate = moment( new Date(row.updatedAt) ).fromNow();
+                    row.createdAtRelative = moment( new Date(row.createdAt) ).fromNow();
+                    row.updatedAtRelative = moment( new Date(row.updatedAt) ).fromNow();
                 });
 
                 return {
@@ -90,19 +92,14 @@ export class WordsService {
         });
     }
 
-    updateWord(id: string, word: Word): Observable<Word> {
-        return this.getDB()
-            .mergeMap(conn => {
-                return this.toObs( conn.words.findById(id) );
-            })
-            .mergeMap((model: any) => {
-                return model? Observable.of(model): 
-                    Observable.throw(`Word with id "${id}" not found`);
-            })
-            .mergeMap((model: any) => {
-                return this.toObs( model.update(word) )
-                    .map((model: any) => model.dataValues);
-            });
+    updateWord(word: Word): Observable<Word> {
+        return this.getDB().mergeMap(conn => {
+            return this.toObs( 
+                conn.words.update(word, {
+                    where: { id: word.id }
+                })
+            ).mapTo(word);
+        });
     }
     
     deleteWord(id: string): Observable<null> {
