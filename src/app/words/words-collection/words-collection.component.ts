@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { MessageService } from 'primeng/components/common/messageservice';
+import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
-import * as utils from '../../core/utils';
 import { RequestHelper } from '../../core/utils';
 
 @Component({
   selector: 'mw-words-collection',
   templateUrl: './words-collection.component.html',
   styleUrls: ['./words-collection.component.less'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [ConfirmationService]
 })
 export class WordsCollectionComponent implements OnInit {
 
@@ -20,16 +21,19 @@ export class WordsCollectionComponent implements OnInit {
   
   words: Word[];
 
-  request = new utils.RequestHelper({
-    fail: (method, error) => this.messageService.add({
-      severity: 'error', detail: error.message
-    })
-  });
+  request: RequestHelper;
 
   constructor(
     private wordsService: WordsService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
+
+    this.request = new RequestHelper({
+      fail: (method, error) => this.messageService.add({
+        severity: 'error', detail: error.message
+      })
+    });
 
     this.request.method('getWords', {
       create: () => {
@@ -70,25 +74,23 @@ export class WordsCollectionComponent implements OnInit {
     this.request.cancelAll();
   }
 
-  onLazyLoad(event): void {
+  onLazyLoad(event: any): void {
     this.paging.skip = event.first;
     this.request.invoke('getWords');
   }
 
   onWordAdd(): void {
-    
+    this.wordsService.createWord({ text: 'Test word' }).subscribe(() => this.request.invoke('getWords'));
   }
 
-  onRowClick(): void {
-    debugger;
+  onWordEdit(): void {
+
   }
 
-  onEditWord(word: Word): void {
-    console.log(word);
+  onWordDelete(word: Word): void {
+    this.confirmationService.confirm({
+      message: `Are you really want to delete word "${word.text}"?`,
+      accept: () => this.request.invoke('deleteWord', word.id)
+    });
   }
-
-  onRemoveWord(word: Word): void {
-    this.request.invoke('deleteWord', word.id);
-  }
-
 }

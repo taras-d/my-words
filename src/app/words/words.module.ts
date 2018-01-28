@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { MessagesModule } from 'primeng/messages';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { WordsRoutingModule } from './words-routing.module';
 import { WordsComponent } from './words.component';
@@ -20,7 +21,8 @@ const primeNgModules = [
   CardModule,
   MessagesModule,
   TableModule,
-  ButtonModule
+  ButtonModule,
+  ConfirmDialogModule
 ];
 
 @NgModule({

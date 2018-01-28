@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -25,6 +26,7 @@ import { CoreModule } from './core/core.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CoreModule,
     WordsModule,
     GrowlModule,

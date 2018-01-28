@@ -1,3 +1,4 @@
+<!-- Words table -->
 <p-table 
     [value]="words" 
     [loading]="loading"
@@ -6,8 +7,7 @@
     [first]="paging.skip"
     [rows]="paging.limit"
     [totalRecords]="paging.total"
-    (onLazyLoad)="onLazyLoad($event)"
-    (onRowClick)="onRowClick($event)">
+    (onLazyLoad)="onLazyLoad($event)">
     <ng-template pTemplate="header">
         <tr>
             <th>Word</th>
@@ -22,8 +22,16 @@
             <td>{{word.translation}}</td>
             <td [title]="word.updatedAt">{{word.relativeDate}}</td>
             <td style="text-align: right;">
-                <p-button (onClick)="onEditWord(word)" icon="fa fa-fw fa-edit" styleClass="ui-button-secondary"></p-button>
-                <p-button (onClick)="onRemoveWord(word)" icon="fa fa-fw fa-times" styleClass="ui-button-secondary"></p-button>
+                <p-button
+                    title="Edit word"
+                    icon="fa fa-fw fa-edit"
+                    (onClick)="onWordEdit(word)">
+                </p-button>
+                <p-button
+                    title="Delete word" 
+                    icon="fa fa-fw fa-trash-o"
+                    (onClick)="onWordDelete(word)">
+                </p-button>
             </td>
         </tr>
     </ng-template>
@@ -34,6 +42,9 @@
     </ng-template>
     <ng-template pTemplate="summary">
         <span class="total">Total words: {{paging.total}}</span>
-        <p-button label="Add word" icon="fa fa-fw fa-check" (click)="onWordAdd()"></p-button>
+        <p-button label="Add word" icon="fa fa-fw fa-plus" (click)="onWordAdd()"></p-button>
     </ng-template>
 </p-table>
+
+<!-- Delete word confirm -->
+<p-confirmDialog header="Delete word" width="400"></p-confirmDialog>
