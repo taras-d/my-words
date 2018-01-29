@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { WordEditComponent } from '../word-edit/word-edit.component';
   encapsulation: ViewEncapsulation.None,
   providers: [ConfirmationService]
 })
-export class WordsCollectionComponent implements OnInit {
+export class WordsCollectionComponent implements OnDestroy {
 
   @ViewChild(WordEditComponent) wordEditCmp: WordEditComponent;
 
@@ -34,7 +34,7 @@ export class WordsCollectionComponent implements OnInit {
   ) {
 
     this.request = new RequestHelper({
-      fail: (method, error) => this.messageService.add({
+      fail: (method: string, error: Error) => this.messageService.add({
         severity: 'error', detail: error.message
       })
     });
@@ -68,10 +68,6 @@ export class WordsCollectionComponent implements OnInit {
         this.request.invoke('getWords');
       }
     });
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

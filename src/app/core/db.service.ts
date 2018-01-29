@@ -29,7 +29,7 @@ export class DBService {
             this.connection = eval("require('../db/models')");
             return Observable.of(this.connection);
         } else {
-            return Observable.throw(new Error('Cannot connect to database outside Electron'));
+            return Observable.throw(new Error('Cannot connect to database'));
         }
     }
 
