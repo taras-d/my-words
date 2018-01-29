@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 
@@ -14,14 +14,12 @@ import { RequestHelper } from '../../core/utils';
 })
 export class WordEditComponent implements OnDestroy {
 
-  @ViewChild('form') form;
-
   @Output() saved = new EventEmitter();
 
   visible: boolean = false;
   saving: boolean = false;
   header: string = '';
-  word: Word;
+  word: Word = null;
 
   request: RequestHelper;
 
@@ -72,14 +70,10 @@ export class WordEditComponent implements OnDestroy {
   }
 
   onSave(): void {
-    if (this.saving) {
-      return;
-    }
-
-    // TODO: Use angular build-in form validation
-    const { word } = this;
-    if (word && word.text) {
+    const word = this.word;
+    if (!this.saving && word.text && word.text.trim()) {
       this.request.invoke(word.id? 'updateWord': 'createWord', word);
+      return;
     }
   }
 

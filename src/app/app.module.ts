@@ -12,13 +12,12 @@ import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 
-import { GrowlModule } from 'primeng/growl';
-
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { WordsModule } from './words/words.module';
 import { CoreModule } from './core/core.module';
+import { WordsModule } from './words/words.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,8 @@ import { CoreModule } from './core/core.module';
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
+    SharedModule,
     WordsModule,
-    GrowlModule,
     AppRoutingModule
   ],
   providers: [],
