@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { WordsComponent } from './words.component';
 import { WordsCollectionComponent } from './words-collection/words-collection.component';
-import { RepeatWordsComponent } from './repeat-words/repeat-words.component';
+import { WordsStatsComponent } from './words-stats/words-stats.component';
 import { RandomWordComponent } from './random-word/random-word.component';
 
 const routes: Routes = [
@@ -16,8 +16,8 @@ const routes: Routes = [
         component: WordsCollectionComponent
       },
       {
-        path: 'repeat',
-        component: RepeatWordsComponent
+        path: 'stats',
+        component: WordsStatsComponent
       },
       {
         path: 'random',

@@ -16,14 +16,14 @@ export class WordsComponent {
       routerLinkActiveOptions: { exact: true }
     },
     {
-      label: 'Repeat',
-      icon: 'fa-repeat',
-      routerLink: '/words/repeat'
-    },
-    {
       label: 'Random',
       icon: 'fa-random',
       routerLink: '/words/random'
+    },
+    {
+      label: 'Stats',
+      icon: 'fa-bar-chart',
+      routerLink: '/words/stats'
     }
   ];
 
