@@ -45,6 +45,7 @@ export class WordsService {
         return this.getDB().mergeMap(conn => {
             const query: any = {
                 raw: true,
+                where: {},
                 order: [
                     ['updatedAt', 'DESC']
                 ]
@@ -55,9 +56,18 @@ export class WordsService {
             query.limit = paging.limit || 10;
 
             if (filters) {
-                query.where = {};
                 for (const column of Object.keys(filters)) {
-                    query.where[column] = this.dbService.getColumnFilter(filters[column]);
+                    const filter = filters[column];
+                    if (column === 'repeat') {
+                        if (filter.value.val !== undefined) {
+                            query.where[column] = this.dbService.getColumnFilter({
+                                matchMode: filter.matchMode,
+                                value: filter.value.val
+                            });
+                        }
+                    } else {
+                         query.where[column] = this.dbService.getColumnFilter(filter);
+                    }
                 }
             }
 

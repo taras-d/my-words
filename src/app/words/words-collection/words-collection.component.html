@@ -24,16 +24,26 @@
             <th>
                 <input 
                     value="{{filters.text?.value}}"
+                    placeholder="Filter by word"
                     pInputText 
                     (input)="dt.filter($event.target.value, 'text', 'contains')">
             </th>
             <th>
                 <input
                     value="{{filters.translation?.value}}"
+                    placeholder="Filter by translation"
                     pInputText 
                     (input)="dt.filter($event.target.value, 'translation', 'contains')">
             </th>
-            <th></th>
+            <th>
+                <p-dropdown
+                    [autoWidth]="false"
+                    [options]="[{ txt: '-' }, { txt: 'yes', val: true }, { txt: 'no', val: false }]"
+                    optionLabel="txt"
+                    [ngModel]="filters.repeat?.value"
+                    (ngModelChange)="dt.filter($event, 'repeat', 'equals')">
+                </p-dropdown>
+            </th>
             <th></th>
             <th></th>
         </tr>
@@ -44,7 +54,7 @@
             <td>{{word.translation}}</td>
             <td>{{word.repeat == 1? 'yes': 'no'}}</td>
             <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
-                {{word.updatedAtRelative}}
+                {{word.createdAtRelative}}
             </td>
             <td style="text-align: right;">
                 <p-button

@@ -59,9 +59,8 @@ export class DBService {
             case 'contains':
                 return { [Op.like]: literal(`'%${this.escapeLike(value)}%' ESCAPE '\\'`) };
             case 'equals':
-                return value;
             default:
-                return value;
+                return { [Op.eq]: value };
         }
     }
 

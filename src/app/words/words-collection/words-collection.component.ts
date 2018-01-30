@@ -24,7 +24,6 @@ export class WordsCollectionComponent
 
   paging = { skip: 0, limit: 10, total: 0 };
   filters = {};
-
   words: Word[];
 
   request: RequestHelper;

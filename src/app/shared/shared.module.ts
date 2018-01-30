@@ -12,7 +12,8 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { GrowlModule } from 'primeng/growl';
-import { CheckboxModule, Checkbox } from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { OpenInGTDirective } from './directives/open-in-gt/open-in-gt.directive';
 
@@ -29,7 +30,8 @@ const primeNgModules = [
   InputTextModule,
   InputTextareaModule,
   GrowlModule,
-  CheckboxModule
+  CheckboxModule,
+  DropdownModule
 ];
 
 const directives = [
