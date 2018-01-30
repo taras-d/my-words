@@ -45,6 +45,8 @@
     </div>
   </form>
 
+  <mw-loader [visible]="saving" [expand]="true"></mw-loader>
+
   <p-footer>
     <p-button
       icon="fa fa-remove"
@@ -53,7 +55,7 @@
     </p-button>
     <p-button 
       styleClass="save"
-      icon="fa {{saving? 'fa-spin fa-spinner': 'fa-save'}}"
+      icon="fa fa-save"
       label="Save"
       (click)="onSave()">
     </p-button>

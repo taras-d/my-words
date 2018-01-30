@@ -9,6 +9,10 @@ export class LoaderComponent {
 
   @Input() 
   @HostBinding('class.expand')
-  expand: boolean = false;
+  expand: boolean;
+
+  @Input()
+  @HostBinding('class.visible')
+  visible: boolean;
 
 }
