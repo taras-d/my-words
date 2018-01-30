@@ -10,12 +10,12 @@ import { WordsService, Word } from '../words.service';
   templateUrl: './random-word.component.html',
   styleUrls: ['./random-word.component.less']
 })
-export class RandomWordComponent 
+export class RandomWordComponent
   implements OnInit, OnDestroy {
 
   loading: boolean;
   hint: boolean;
-  
+
   word: Word;
 
   request: RequestHelper;

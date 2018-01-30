@@ -2,15 +2,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 export interface Method {
-    create: (...params: any[]) => Observable<any>,
-    done?: (result: any, ...params: any[]) => void,
-    fail?: (error: any, ...params: any[]) => void
-};
+    create: (...params: any[]) => Observable<any>;
+    done?: (result: any, ...params: any[]) => void;
+    fail?: (error: any, ...params: any[]) => void;
+}
 
 export interface Options {
-    done?: (name: string, result: any, ...params: any[]) => void,
-    fail?: (name: string, error: any, ...params: any[]) => void
-};
+    done?: (name: string, result: any, ...params: any[]) => void;
+    fail?: (name: string, error: any, ...params: any[]) => void;
+}
 
 export class RequestHelper {
 
@@ -48,7 +48,7 @@ export class RequestHelper {
         if (!(obs instanceof Observable)) {
             throw new Error('Create should return Observable');
         }
-        
+
         const options = this.options || {};
 
         this.subs[name] = obs.subscribe(

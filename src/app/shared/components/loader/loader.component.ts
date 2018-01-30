@@ -7,7 +7,7 @@ import { Component, Input, HostBinding } from '@angular/core';
 })
 export class LoaderComponent {
 
-  @Input() 
+  @Input()
   @HostBinding('class.expand')
   expand: boolean;
 

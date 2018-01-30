@@ -17,10 +17,11 @@ import { WordEditComponent } from './word-edit/word-edit.component';
     WordsRoutingModule
   ],
   declarations: [
-    WordsComponent, 
-    WordsCollectionComponent, 
-    RepeatWordsComponent, 
-    RandomWordComponent, WordEditComponent
+    WordsComponent,
+    WordsCollectionComponent,
+    RepeatWordsComponent,
+    RandomWordComponent,
+    WordEditComponent
   ],
   providers: [
     WordsService

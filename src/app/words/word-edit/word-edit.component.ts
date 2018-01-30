@@ -16,9 +16,9 @@ export class WordEditComponent implements OnDestroy {
 
   @Output() saved = new EventEmitter();
 
-  visible: boolean = false;
-  saving: boolean = false;
-  header: string = '';
+  visible = false;
+  saving = false;
+  header = '';
   word: Word = null;
 
   request: RequestHelper;
@@ -26,7 +26,7 @@ export class WordEditComponent implements OnDestroy {
   constructor(
     private wordsService: WordsService,
     private messageService: MessageService
-  ) { 
+  ) {
 
     this.request = new RequestHelper({
       done: () => {
@@ -61,7 +61,7 @@ export class WordEditComponent implements OnDestroy {
 
   open(word: Word): void {
     this.visible = true;
-    this.header = `${word.id? 'Edit': 'Add'} word`;
+    this.header = `${word.id ? 'Edit' : 'Add'} word`;
     this.word = Object.assign({}, word);
   }
 
@@ -72,7 +72,7 @@ export class WordEditComponent implements OnDestroy {
   onSave(): void {
     const word = this.word;
     if (!this.saving && word.text && word.text.trim()) {
-      this.request.invoke(word.id? 'updateWord': 'createWord', word);
+      this.request.invoke(word.id ? 'updateWord' : 'createWord', word);
       return;
     }
   }

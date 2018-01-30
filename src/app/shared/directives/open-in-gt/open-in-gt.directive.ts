@@ -7,11 +7,11 @@ import { openInGoogleTranslate } from '../../../core/utils';
 })
 export class OpenInGTDirective {
 
-  @Input('mwOpenInGT') word: string; 
+  @Input('mwOpenInGT') mwOpenInGT: string;
 
   @HostListener('click')
   onClick(): void {
-    openInGoogleTranslate(this.word);
+    openInGoogleTranslate(this.mwOpenInGT);
   }
 
 }

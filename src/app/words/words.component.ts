@@ -9,18 +9,18 @@ import { Component, ViewEncapsulation } from '@angular/core';
 export class WordsComponent {
 
   tabs = [
-    { 
-      label: 'Words', 
-      icon: 'fa-list', 
-      routerLink: '/words', 
+    {
+      label: 'Words',
+      icon: 'fa-list',
+      routerLink: '/words',
       routerLinkActiveOptions: { exact: true }
     },
-    { 
-      label: 'Repeat', 
-      icon: 'fa-repeat', 
+    {
+      label: 'Repeat',
+      icon: 'fa-repeat',
       routerLink: '/words/repeat'
     },
-    { 
+    {
       label: 'Random',
       icon: 'fa-random',
       routerLink: '/words/random'

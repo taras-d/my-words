@@ -6,28 +6,28 @@ import * as moment from 'moment';
 import { DBService, DBConnection } from '../core/db.service';
 
 export interface Word {
-    id?: string,
-    text: string,
-    translation?: string,
-    createdAt?: Date,
-    createdAtRelative?: Date,
-    updatedAt?: Date,
-    updatedAtRelative?: Date
-};
+    id?: string;
+    text: string;
+    translation?: string;
+    createdAt?: Date;
+    createdAtRelative?: Date;
+    updatedAt?: Date;
+    updatedAtRelative?: Date;
+}
 
 export interface WordsResponse {
-    skip: number,
-    limit: number,
-    total: number,
-    data: Word[]
-};
+    skip: number;
+    limit: number;
+    total: number;
+    data: Word[];
+}
 
 
 @Injectable()
 export class WordsService {
 
     constructor(private dbService: DBService) {
-        
+
     }
 
     createWord(word: Word): Observable<Word> {
@@ -56,7 +56,7 @@ export class WordsService {
 
             if (filters) {
                 query.where = {};
-                for (let column in filters) {
+                for (const column of Object.keys(filters)) {
                     query.where[column] = this.dbService.getColumnFilter(filters[column]);
                 }
             }
@@ -79,7 +79,7 @@ export class WordsService {
 
     getRandomWord(): Observable<Word> {
         return this.getDB().mergeMap(conn => {
-            return this.toObs( 
+            return this.toObs(
                 conn.sequelize.query('SELECT * FROM words ORDER BY RANDOM() LIMIT 1')
             ).map((response: any) => response[0][0] || null);
         });
@@ -87,17 +87,17 @@ export class WordsService {
 
     updateWord(word: Word): Observable<Word> {
         return this.getDB().mergeMap(conn => {
-            return this.toObs( 
+            return this.toObs(
                 conn.words.update(word, {
                     where: { id: word.id }
                 })
             ).mapTo(word);
         });
     }
-    
+
     deleteWord(id: string): Observable<null> {
         return this.getDB().mergeMap(conn => {
-            return this.toObs( 
+            return this.toObs(
                 conn.words.destroy({ where: { id } })
             ).mapTo(null);
         });
@@ -111,4 +111,4 @@ export class WordsService {
         return this.dbService.primiseToObservable(promise);
     }
 
-} 
+}

@@ -2,13 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
-import { isElectron } from './utils';
+import { isElectron, requireNM } from './utils';
 
 export interface DBConnection {
-    Sequelize: any,
-    sequelize: any,
-    words: any
-};
+    Sequelize: any;
+    sequelize: any;
+    words: any;
+}
 
 @Injectable()
 export class DBService {
@@ -26,7 +26,7 @@ export class DBService {
         }
 
         if (isElectron()) {
-            this.connection = eval("require('../db/models')");
+            this.connection = requireNM('../db/models');
             return Observable.of(this.connection);
         } else {
             return Observable.throw(new Error('Cannot connect to database'));
@@ -43,7 +43,7 @@ export class DBService {
                 });
             }).catch(err => {
                 this.zone.run(() => {
-                    obs.error(err)
+                    obs.error(err);
                 });
             });
         });

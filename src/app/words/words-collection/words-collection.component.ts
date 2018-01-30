@@ -15,7 +15,8 @@ import { WordEditComponent } from '../word-edit/word-edit.component';
   encapsulation: ViewEncapsulation.None,
   providers: [ConfirmationService]
 })
-export class WordsCollectionComponent implements OnDestroy {
+export class WordsCollectionComponent
+  implements OnInit, OnDestroy {
 
   @ViewChild(WordEditComponent) wordEditCmp: WordEditComponent;
 
@@ -23,7 +24,7 @@ export class WordsCollectionComponent implements OnDestroy {
 
   paging = { skip: 0, limit: 10, total: 0 };
   filters = {};
-  
+
   words: Word[];
 
   request: RequestHelper;
@@ -49,8 +50,8 @@ export class WordsCollectionComponent implements OnDestroy {
         this.loading = false;
         this.words = result.data;
         this.paging = {
-          skip: result.skip, 
-          limit: result.limit, 
+          skip: result.skip,
+          limit: result.limit,
           total: result.total
         };
       }
@@ -80,7 +81,7 @@ export class WordsCollectionComponent implements OnDestroy {
   }
 
   loadWords(): void {
-    this.request.invoke('getWords')
+    this.request.invoke('getWords');
   }
 
   onPageChange({ first, rows }) {
