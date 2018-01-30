@@ -61,14 +61,6 @@ export class WordsService {
                 }
             }
 
-            // if (sort) {
-            //     sort.forEach(item => {
-            //         if (item.order) {
-            //             query.order.push([item.column, item.order === 1? 'ASC': 'DESC'])
-            //         }
-            //     });
-            // }
-
             return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
                 res.rows.forEach(row => {
                     row.createdAtRelative = moment( new Date(row.createdAt) ).fromNow();

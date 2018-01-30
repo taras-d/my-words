@@ -24,6 +24,14 @@
           [(ngModel)]="word.translation">
         </textarea>
       </div>
+      <div class="ui-g-4">Repeat</div>
+      <div class="ui-g-8">
+        <p-checkbox
+          name="repeat"
+          [binary]="true"
+          [(ngModel)]="word.repeat">
+        </p-checkbox>
+      </div>
       <ng-container *ngIf="word.id">
         <div class="ui-g-4">Created at</div>
         <div class="ui-g-8">

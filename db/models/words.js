@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     translation: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    repeat: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     freezeTableName: true

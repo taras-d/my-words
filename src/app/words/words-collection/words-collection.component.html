@@ -16,8 +16,9 @@
         <tr>
             <th>Word</th>
             <th>Translation</th>
+            <th style="width: 70px;">Repeat</th>
             <th style="width: 200px;">Date</th>
-            <th style="width: 130px;"></th>
+            <th style="width: 120px;"></th>
         </tr>
         <tr>
             <th>
@@ -34,12 +35,14 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-word>
         <tr>
             <td>{{word.text}}</td>
             <td>{{word.translation}}</td>
+            <td>{{word.repeat == 1? 'yes': 'no'}}</td>
             <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
                 {{word.updatedAtRelative}}
             </td>
