@@ -15,6 +15,8 @@ import { GrowlModule } from 'primeng/growl';
 
 import { OpenInGTDirective } from './directives/open-in-gt/open-in-gt.directive';
 
+import { LoaderComponent } from './components/loader/loader.component';
+
 const primeNgModules = [
   TabMenuModule,
   CardModule,
@@ -32,6 +34,10 @@ const directives = [
   OpenInGTDirective
 ];
 
+const components = [
+  LoaderComponent
+];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -42,10 +48,12 @@ const directives = [
     CommonModule,
     FormsModule,
     ...primeNgModules,
-    ...directives
+    ...directives,
+    ...components
   ],
   declarations: [
-    ...directives
+    ...directives,
+    ...components
   ]
 })
 export class SharedModule { }
