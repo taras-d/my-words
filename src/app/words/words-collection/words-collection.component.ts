@@ -19,9 +19,10 @@ export class WordsCollectionComponent implements OnDestroy {
 
   @ViewChild(WordEditComponent) wordEditCmp: WordEditComponent;
 
-  loading: boolean = true;
+  loading: boolean;
 
   paging = { skip: 0, limit: 10, total: 0 };
+  filters = {};
   
   words: Word[];
 
@@ -42,7 +43,7 @@ export class WordsCollectionComponent implements OnDestroy {
     this.request.method('getWords', {
       create: () => {
         this.loading = true;
-        return this.wordsService.getWords(this.paging);
+        return this.wordsService.getWords(this.paging, this.filters);
       },
       done: result => {
         this.loading = false;
@@ -70,13 +71,30 @@ export class WordsCollectionComponent implements OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+    this.loadWords();
+  }
+
   ngOnDestroy(): void {
     this.request.cancelAll();
   }
 
-  onLazyLoad(event: any): void {
-    this.paging.skip = event.first;
-    this.request.invoke('getWords');
+  loadWords(): void {
+    this.request.invoke('getWords')
+  }
+
+  onPageChange({ first, rows }) {
+    const paging = this.paging;
+    if (paging.skip !== first) {
+      paging.skip = first;
+      this.loadWords();
+    }
+  }
+
+  onFilterChange({ filters }) {
+    this.paging.skip = 0;
+    this.filters = filters;
+    this.loadWords();
   }
 
   onWordAdd(): void {

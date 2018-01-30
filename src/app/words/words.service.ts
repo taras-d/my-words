@@ -39,7 +39,7 @@ export class WordsService {
 
     getWords(
         paging?: { skip: number, limit: number },
-        filter?: { [key: string]: any },
+        filters?: { [key: string]: any },
         sort?: { column: string, order: number }[]
     ): Observable<WordsResponse> {
         return this.getDB().mergeMap(conn => {
@@ -54,11 +54,12 @@ export class WordsService {
             query.offset = paging.skip || 0;
             query.limit = paging.limit || 10;
 
-            // if (filter) {
-            //     for (let column in filter) {
-
-            //     }
-            // }
+            if (filters) {
+                query.where = {};
+                for (let column in filters) {
+                    query.where[column] = this.dbService.getColumnFilter(filters[column]);
+                }
+            }
 
             // if (sort) {
             //     sort.forEach(item => {

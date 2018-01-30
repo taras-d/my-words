@@ -13,7 +13,7 @@ export interface DBConnection {
 @Injectable()
 export class DBService {
 
-    private connection: any;
+    private connection: DBConnection;
 
     constructor(private zone: NgZone) {
 
@@ -47,6 +47,26 @@ export class DBService {
                 });
             });
         });
+    }
+
+    getColumnFilter({ matchMode, value }): { [key: string]: any } {
+        const { Op, literal } = this.connection.Sequelize;
+        switch (matchMode) {
+            case 'startsWith':
+                return { [Op.like]: literal(`'${this.escapeLike(value)}%' ESCAPE '\\'`) };
+            case 'endsWith':
+                return { [Op.like]: literal(`'%${this.escapeLike(value)}' ESCAPE '\\'`) };
+            case 'contains':
+                return { [Op.like]: literal(`'%${this.escapeLike(value)}%' ESCAPE '\\'`) };
+            case 'equals':
+                return value;
+            default:
+                return value;
+        }
+    }
+
+    private escapeLike(value: string): string {
+        return value.replace(/(%|_)/g, '\\$1');
     }
 
 }

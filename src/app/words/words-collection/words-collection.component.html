@@ -1,6 +1,6 @@
 <!-- Words table -->
 <p-table 
-    [value]="words" 
+    [value]="words"
     [loading]="loading"
     loadingIcon="fa-spinner"
     [lazy]="true"
@@ -8,13 +8,32 @@
     [first]="paging.skip"
     [rows]="paging.limit"
     [totalRecords]="paging.total"
-    (onLazyLoad)="onLazyLoad($event)">
+    [filters]="filters"
+    (onFilter)="onFilterChange($event)"
+    (onPage)="onPageChange($event)"
+    #dt>
     <ng-template pTemplate="header">
         <tr>
             <th>Word</th>
             <th>Translation</th>
             <th style="width: 200px;">Date</th>
             <th style="width: 130px;"></th>
+        </tr>
+        <tr>
+            <th>
+                <input 
+                    value="{{filters.text?.value}}"
+                    pInputText 
+                    (input)="dt.filter($event.target.value, 'text', 'contains')">
+            </th>
+            <th>
+                <input
+                    value="{{filters.translation?.value}}"
+                    pInputText 
+                    (input)="dt.filter($event.target.value, 'translation', 'contains')">
+            </th>
+            <th></th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-word>
