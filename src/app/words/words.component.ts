@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'mw-words',
@@ -6,7 +6,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./words.component.less'],
   encapsulation: ViewEncapsulation.None
 })
-export class WordsComponent implements OnInit {
+export class WordsComponent {
 
   tabs = [
     { 
@@ -26,11 +26,5 @@ export class WordsComponent implements OnInit {
       routerLink: '/words/random'
     }
   ];
-
-  constructor() { }
-
-  ngOnInit(): void {
-
-  }
 
 }

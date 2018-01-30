@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
-import { RequestHelper, openInGoogleTranslate } from '../../core/utils';
+import { RequestHelper } from '../../core/utils';
 
 import { WordEditComponent } from '../word-edit/word-edit.component';
 
@@ -98,7 +98,4 @@ export class WordsCollectionComponent implements OnDestroy {
     });
   }
 
-  onOpenInGoogleTranslate(word: Word): void {
-    openInGoogleTranslate(word.text);
-  }
 }

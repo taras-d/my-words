@@ -28,16 +28,19 @@
                 <p-button
                     title="Open in Google translate"
                     icon="fa fa-fw fa-language"
-                    (onClick)="onOpenInGoogleTranslate(word)">
+                    styleClass="ui-button-secondary"
+                    mwOpenInGT="{{word.text}}">
                 </p-button>
                 <p-button
                     title="Edit word"
                     icon="fa fa-fw fa-edit"
+                    styleClass="ui-button-secondary"
                     (onClick)="onWordEdit(word)">
                 </p-button>
                 <p-button
                     title="Delete word" 
                     icon="fa fa-fw fa-trash-o"
+                    styleClass="ui-button-secondary"
                     (onClick)="onWordDelete(word)">
                 </p-button>
             </td>

@@ -1,1 +1,31 @@
-Random word
+<div class="word-details" *ngIf="word">
+    <div class="word">
+        {{word.text}}
+    </div>
+    <div class="word-hint" *ngIf="hint">
+        {{word.translation}}
+    </div>
+    <div class="word-actions">
+        <p-button 
+            *ngIf="word.translation"
+            icon="fa fa-fw fa-question-circle-o"
+            titla="Toggle translation"
+            styleClass="ui-button-secondary"
+            title="{{hint? 'Hide': 'Show'}} hint"
+            (onClick)="hint = !hint">
+        </p-button>
+        <p-button
+            icon="fa fa-fw fa-language" 
+            class="ui-button-secondary"
+            styleClass="ui-button-secondary"
+            mwOpenInGT="{{word.text}}"
+            title="Open in Google translate">
+        </p-button>
+    </div>
+</div>
+
+<p-button 
+    icon="fa fa-random" 
+    label="Next word"
+    (onClick)="onNextWord()">
+</p-button>

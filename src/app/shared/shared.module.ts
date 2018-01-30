@@ -13,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { GrowlModule } from 'primeng/growl';
 
+import { OpenInGTDirective } from './directives/open-in-gt/open-in-gt.directive';
+
 const primeNgModules = [
   TabMenuModule,
   CardModule,
@@ -26,6 +28,10 @@ const primeNgModules = [
   GrowlModule
 ];
 
+const directives = [
+  OpenInGTDirective
+];
+
 @NgModule({
   imports: [
     CommonModule,
@@ -35,8 +41,11 @@ const primeNgModules = [
   exports: [
     CommonModule,
     FormsModule,
-    ...primeNgModules
+    ...primeNgModules,
+    ...directives
   ],
-  declarations: []
+  declarations: [
+    ...directives
+  ]
 })
 export class SharedModule { }
