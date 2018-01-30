@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 
+import { MessageService } from 'primeng/components/common/messageservice';
+
 import { RequestHelper } from '../../core/utils';
 import { WordsService, Word } from '../words.service';
 
@@ -20,12 +22,15 @@ export class RandomWordComponent
 
   constructor(
     private el: ElementRef,
-    private wordsService: WordsService
+    private wordsService: WordsService,
+    private messageService: MessageService
   ) {
 
     this.request = new RequestHelper({
-      fail: (method, error) => {
-        // TODO: Show error message
+      fail: (method: string, error: Error) => {
+        this.messageService.add({
+          severity: 'error', detail: error.message
+        });
       }
     });
 
