@@ -15,7 +15,9 @@ export class NotEmptyValidatorDirective implements Validator {
   @Input()
   set mwNotEmpty(value: string|boolean) {
     this.enabled = value === '' || value === true || value === 'true';
-    this.onChange && this.onChange();
+    if (this.onChange) {
+      this.onChange();
+    }
   }
 
   validate(control: AbstractControl): ValidationErrors {
