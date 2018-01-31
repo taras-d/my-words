@@ -6,15 +6,18 @@
   width="400"
   (onHide)="onHidden()">
 
-  <form *ngIf="word">
+  <form *ngIf="word" #form="ngForm" (ngSubmit)="onSubmit()">
     <div class="ui-g">
+      <!-- Text -->
       <div class="ui-g-4">Word</div>
       <div class="ui-g-8">
         <input 
           pInputText 
           name="text"
-          [(ngModel)]="word.text">
+          [(ngModel)]="word.text"
+          mwNotEmpty>
       </div>
+      <!-- Translation -->
       <div class="ui-g-4">Translation</div>
       <div class="ui-g-8">
         <textarea 
@@ -24,6 +27,7 @@
           [(ngModel)]="word.translation">
         </textarea>
       </div>
+      <!-- Repeat -->
       <div class="ui-g-4">Repeat</div>
       <div class="ui-g-8">
         <p-checkbox
@@ -32,6 +36,7 @@
           [(ngModel)]="word.repeat">
         </p-checkbox>
       </div>
+      <!-- Created at -->
       <div class="ui-g-4">Created at</div>
       <div class="ui-g-8">
         <input 
@@ -40,6 +45,7 @@
           disabled
           value="{{word.createdAt|date: 'dd.MM.yyy HH:mm:ss'}}">
       </div>
+      <!-- Updated at -->
       <div class="ui-g-4">Updated at</div>
       <div class="ui-g-8">
         <input 
@@ -48,23 +54,25 @@
           disabled
           value="{{word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'}}">
       </div>
+      <!-- Submit -->
+      <div class="ui-g-4"></div>
+      <div class="ui-g-8 text-right">
+        <p-button
+          icon="fa fa-remove"
+          label="Cancel"
+          (click)="onCancel()">
+        </p-button>
+        <p-button 
+          type="submit"
+          styleClass="save"
+          icon="fa fa-save"
+          label="Save"
+          [disabled]="form.invalid">
+        </p-button>
+      </div>
     </div>
   </form>
 
   <mw-loader [visible]="saving" [expand]="true"></mw-loader>
-
-  <p-footer>
-    <p-button
-      icon="fa fa-remove"
-      label="Cancel"
-      (click)="onCancel()">
-    </p-button>
-    <p-button 
-      styleClass="save"
-      icon="fa fa-save"
-      label="Save"
-      (click)="onSave()">
-    </p-button>
-  </p-footer>
 
 </p-dialog>

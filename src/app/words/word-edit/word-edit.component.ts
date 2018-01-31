@@ -59,11 +59,8 @@ export class WordEditComponent implements OnDestroy {
     this.visible = false;
   }
 
-  onSave(): void {
-    const word = this.word;
-    if (!this.saving && word.text && word.text.trim()) {
-      this.request.invoke('updateWord');
-    }
+  onSubmit(): void {
+    this.request.invoke('updateWord');
   }
 
   onHidden(): void {

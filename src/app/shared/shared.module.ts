@@ -16,7 +16,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 
 import { OpenInGTDirective } from './directives/open-in-gt/open-in-gt.directive';
-import { NotEmptyValidatorDirective } from './directives/not-empty-validator.directive';
+import { NotEmptyValidatorDirective } from './directives/not-empty-validator/not-empty-validator.directive';
 
 import { LoaderComponent } from './components/loader/loader.component';
 
