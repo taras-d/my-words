@@ -31,11 +31,9 @@ export class WordsService {
 
     }
 
-    createWord(word: Word): Observable<Word> {
-        // TODO: Add array of words
+    createWords(words: Word[]): Observable<null> {
         return this.getDB().mergeMap(conn => {
-            return this.toObs( conn.words.create(word) )
-                .map((model: any) => model.dataValues);
+            return this.toObs( conn.words.bulkCreate(words) ).mapTo(null)
         });
     }
 
@@ -49,7 +47,7 @@ export class WordsService {
                 raw: true,
                 where: {},
                 order: [
-                    ['updatedAt', 'DESC']
+                    ['createdAt', 'DESC']
                 ]
             };
 
@@ -97,13 +95,13 @@ export class WordsService {
         });
     }
 
-    updateWord(word: Word): Observable<Word> {
+    updateWord(word: Word): Observable<null> {
         return this.getDB().mergeMap(conn => {
             return this.toObs(
                 conn.words.update(word, {
                     where: { id: word.id }
                 })
-            ).mapTo(word);
+            ).mapTo(null);
         });
     }
 

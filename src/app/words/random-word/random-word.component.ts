@@ -36,28 +36,35 @@ export class RandomWordComponent
 
     this.request.method('getRandomWord', {
       create: () => {
+        this.hint = false;
         this.loading = true;
         return this.wordsService.getRandomWord();
       },
       done: word => {
         this.loading = false;
         this.word = word;
-      }
+      },
+      fail: (error: Error) => this.messageService.add({
+        severity: 'error', detail: error.message
+      })
     });
 
   }
 
   ngOnInit(): void {
-    this.request.invoke('getRandomWord');
+    this.getRandomWord();
   }
 
   ngOnDestroy(): void {
     this.request.cancelAll();
   }
 
-  onNextWord(): void {
-    this.hint = false;
+  getRandomWord(): void {
     this.request.invoke('getRandomWord');
+  }
+
+  onNextWord(): void {
+    this.getRandomWord();
   }
 
 }

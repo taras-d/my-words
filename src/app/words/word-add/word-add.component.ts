@@ -4,7 +4,11 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+import { MessageService } from 'primeng/components/common/messageservice';
+
 import { WordsService, Word } from '../words.service';
+
+import { RequestHelper } from '../../core/utils';
 
 @Component({
   selector: 'mw-word-add',
@@ -23,8 +27,28 @@ export class WordAddComponent
 
   words: Word[];
 
-  constructor() {
-    // TODO: create request
+  request: RequestHelper;
+
+  constructor(
+    private wordsService: WordsService,
+    private messageService: MessageService
+  ) {
+    
+    this.request = new RequestHelper();
+
+    this.request.method('createWords', {
+      create: () => {
+        this.saving = true;
+        return this.wordsService.createWords(this.words);
+      },
+      done: () => {
+        this.visible = false;
+        this.complete.emit();
+      },
+      fail: (error: Error) => this.messageService.add({
+        severity: 'error', detail: error.message
+      })
+    });
   }
 
   ngOnInit(): void {
@@ -32,7 +56,7 @@ export class WordAddComponent
   }
 
   ngOnDestroy(): void {
-    // TODO: cancel request
+    this.request.cancelAll();
   }
 
   open(): void {
@@ -55,8 +79,7 @@ export class WordAddComponent
   onSave(): void {
     const valid = !this.forms.some(form => form.invalid);
     if (valid) {
-      // TODO: invoke request
-      console.log(this.words);
+      this.request.invoke('createWords');
     }
   }
 

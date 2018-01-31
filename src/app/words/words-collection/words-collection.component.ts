@@ -85,7 +85,7 @@ export class WordsCollectionComponent
     this.request.invoke('getWords');
   }
 
-  onPageChange({ first, rows }) {
+  onPageChange({ first, rows }): void {
     const paging = this.paging;
     if (paging.skip !== first) {
       paging.skip = first;
@@ -93,7 +93,7 @@ export class WordsCollectionComponent
     }
   }
 
-  onFilterChange({ filters }) {
+  onFilterChange({ filters }): void {
     this.paging.skip = 0;
     this.filters = filters;
     this.loadWords();

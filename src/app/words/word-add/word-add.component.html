@@ -6,7 +6,7 @@
   width="600"
   (onHide)="onHidden()">
 
-  <div class="words" style="height: 400px; overflow: auto">
+  <div class="words">
     <!-- Word form -->
     <form class="ui-g" *ngFor="let word of words; let i = index">
       <!-- Text -->
@@ -69,5 +69,7 @@
       </p-button>
     </div>
   </div>
+
+  <mw-loader [visible]="saving" [expand]="true"></mw-loader>
 
 </p-dialog>

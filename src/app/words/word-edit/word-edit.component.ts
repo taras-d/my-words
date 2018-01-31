@@ -38,11 +38,9 @@ export class WordEditComponent implements OnDestroy {
         this.visible = false;
         this.complete.emit();
       },
-      fail: (method: string, error: Error) => {
-        this.messageService.add({
-          severity: 'error', detail: error.message
-        });
-      }
+      fail: (error: Error) => this.messageService.add({
+        severity: 'error', detail: error.message
+      })
     });
   }
 
