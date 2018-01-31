@@ -14,11 +14,10 @@ import { RequestHelper } from '../../core/utils';
 })
 export class WordEditComponent implements OnDestroy {
 
-  @Output() saved = new EventEmitter();
+  @Output() editComplete = new EventEmitter();
 
   visible = false;
   saving = false;
-  header = '';
   word: Word = null;
 
   request: RequestHelper;
@@ -28,29 +27,21 @@ export class WordEditComponent implements OnDestroy {
     private messageService: MessageService
   ) {
 
-    this.request = new RequestHelper({
-      done: () => {
-        this.visible = false;
-        this.saved.emit(this.word);
-      },
-      fail: (method: string, error: Error) => {
-        this.messageService.add({
-          severity: 'error', detail: error.message
-        });
-      }
-    });
-
-    this.request.method('createWord', {
-      create: () => {
-        this.saving = true;
-        return this.wordsService.createWord(this.word);
-      }
-    });
+    this.request = new RequestHelper();
 
     this.request.method('updateWord', {
       create: () => {
         this.saving = true;
         return this.wordsService.updateWord(this.word);
+      },
+      done: () => {
+        this.visible = false;
+        this.editComplete.emit();
+      },
+      fail: (method: string, error: Error) => {
+        this.messageService.add({
+          severity: 'error', detail: error.message
+        });
       }
     });
   }
@@ -61,7 +52,6 @@ export class WordEditComponent implements OnDestroy {
 
   open(word: Word): void {
     this.visible = true;
-    this.header = `${word.id ? 'Edit' : 'Add'} word`;
     this.word = Object.assign({}, word);
   }
 
@@ -72,19 +62,13 @@ export class WordEditComponent implements OnDestroy {
   onSave(): void {
     const word = this.word;
     if (!this.saving && word.text && word.text.trim()) {
-      this.request.invoke(word.id ? 'updateWord' : 'createWord', word);
-      return;
+      this.request.invoke('updateWord');
     }
   }
 
   onHidden(): void {
-    setTimeout(() => this.reset());
-  }
-
-  reset(): void {
     this.saving = false;
     this.word = null;
-    this.header = '';
     this.request.cancelAll();
   }
 

@@ -98,15 +98,19 @@ export class WordsCollectionComponent
   }
 
   onWordAdd(): void {
-    this.wordEditCmp.open({} as Word);
+    // TODO: open word add
+  }
+
+  onWordAddComplete(): void {
+    this.loadWords();
   }
 
   onWordEdit(word: Word): void {
     this.wordEditCmp.open(word);
   }
 
-  onWordSaved(word: Word): void {
-    this.request.invoke('getWords');
+  onWordEditComplete(): void {
+    this.loadWords();
   }
 
   onWordDelete(word: Word): void {

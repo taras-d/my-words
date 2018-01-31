@@ -1,5 +1,5 @@
 <p-dialog
-  [header]="header"
+  header="Edit word"
   [(visible)]="visible"
   [modal]="true"
   [dismissableMask]="true"
@@ -32,24 +32,22 @@
           [(ngModel)]="word.repeat">
         </p-checkbox>
       </div>
-      <ng-container *ngIf="word.id">
-        <div class="ui-g-4">Created at</div>
-        <div class="ui-g-8">
-          <input 
-            pInputText 
-            name="createdAt"
-            disabled
-            value="{{word.createdAt|date: 'dd.MM.yyy HH:mm:ss'}}">
-        </div>
-        <div class="ui-g-4">Updated at</div>
-        <div class="ui-g-8">
-          <input 
-            pInputText 
-            name="updatedAt"
-            disabled
-            value="{{word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'}}">
-          </div>
-        </ng-container>
+      <div class="ui-g-4">Created at</div>
+      <div class="ui-g-8">
+        <input 
+          pInputText 
+          name="createdAt"
+          disabled
+          value="{{word.createdAt|date: 'dd.MM.yyy HH:mm:ss'}}">
+      </div>
+      <div class="ui-g-4">Updated at</div>
+      <div class="ui-g-8">
+        <input 
+          pInputText 
+          name="updatedAt"
+          disabled
+          value="{{word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'}}">
+      </div>
     </div>
   </form>
 
