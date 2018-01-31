@@ -7,9 +7,10 @@ import { WordsComponent } from './words.component';
 import { WordsCollectionComponent } from './words-collection/words-collection.component';
 import { WordsStatsComponent } from './words-stats/words-stats.component';
 import { RandomWordComponent } from './random-word/random-word.component';
+import { WordEditComponent } from './word-edit/word-edit.component';
+import { WordAddComponent } from './word-add/word-add.component';
 
 import { WordsService } from './words.service';
-import { WordEditComponent } from './word-edit/word-edit.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { WordEditComponent } from './word-edit/word-edit.component';
     WordsCollectionComponent,
     WordsStatsComponent,
     RandomWordComponent,
-    WordEditComponent
+    WordEditComponent,
+    WordAddComponent
   ],
   providers: [
     WordsService

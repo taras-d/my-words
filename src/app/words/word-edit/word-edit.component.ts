@@ -14,7 +14,7 @@ import { RequestHelper } from '../../core/utils';
 })
 export class WordEditComponent implements OnDestroy {
 
-  @Output() editComplete = new EventEmitter();
+  @Output() complete = new EventEmitter();
 
   visible = false;
   saving = false;
@@ -36,7 +36,7 @@ export class WordEditComponent implements OnDestroy {
       },
       done: () => {
         this.visible = false;
-        this.editComplete.emit();
+        this.complete.emit();
       },
       fail: (method: string, error: Error) => {
         this.messageService.add({

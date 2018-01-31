@@ -56,7 +56,7 @@
             <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
                 {{word.createdAtRelative}}
             </td>
-            <td style="text-align: right;">
+            <td class="text-right">
                 <p-button
                     title="Open in Google translate"
                     icon="fa fa-fw fa-language"
@@ -85,7 +85,11 @@
     </ng-template>
     <ng-template pTemplate="summary">
         <span class="total">Total words: {{paging.total}}</span>
-        <p-button label="Add word" icon="fa fa-fw fa-plus" (click)="onWordAdd()"></p-button>
+        <p-button 
+            label="Add word(s)" 
+            icon="fa fa-fw fa-plus" 
+            (click)="onWordAdd()">
+        </p-button>
     </ng-template>
 </p-table>
 
@@ -93,4 +97,7 @@
 <p-confirmDialog header="Delete word" width="400"></p-confirmDialog>
 
 <!-- Word edit -->
-<mw-word-edit (editComplete)="onWordEditComplete($event)"></mw-word-edit>
+<mw-word-edit (complete)="onWordEditComplete()"></mw-word-edit>
+
+<!-- Word add -->
+<mw-word-add (complete)="onWordAddComplete()"></mw-word-add>

@@ -7,6 +7,7 @@ import { WordsService, Word } from '../words.service';
 import { RequestHelper } from '../../core/utils';
 
 import { WordEditComponent } from '../word-edit/word-edit.component';
+import { WordAddComponent } from '../word-add/word-add.component';
 
 @Component({
   selector: 'mw-words-collection',
@@ -19,6 +20,7 @@ export class WordsCollectionComponent
   implements OnInit, OnDestroy {
 
   @ViewChild(WordEditComponent) wordEditCmp: WordEditComponent;
+  @ViewChild(WordAddComponent) wordAddCmp: WordAddComponent;
 
   loading: boolean;
 
@@ -98,7 +100,7 @@ export class WordsCollectionComponent
   }
 
   onWordAdd(): void {
-    // TODO: open word add
+    this.wordAddCmp.open();
   }
 
   onWordAddComplete(): void {

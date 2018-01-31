@@ -9,6 +9,7 @@ export interface Word {
     id?: string;
     text: string;
     translation?: string;
+    repeat?: boolean;
     createdAt?: Date;
     createdAtRelative?: Date;
     updatedAt?: Date;
@@ -31,6 +32,7 @@ export class WordsService {
     }
 
     createWord(word: Word): Observable<Word> {
+        // TODO: Add array of words
         return this.getDB().mergeMap(conn => {
             return this.toObs( conn.words.create(word) )
                 .map((model: any) => model.dataValues);
