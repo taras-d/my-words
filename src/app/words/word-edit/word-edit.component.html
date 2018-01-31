@@ -4,6 +4,7 @@
   [modal]="true"
   [dismissableMask]="true"
   width="400"
+  positionTop="100"
   (onHide)="onHidden()">
 
   <form *ngIf="word" #form="ngForm" (ngSubmit)="onSubmit()">
