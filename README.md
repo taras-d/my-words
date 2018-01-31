@@ -1,6 +1,6 @@
-# My words
+# my-words
 
-An app that collects words and saves in the local database (sqlite)
+Desktop application that helps to collect and repeat words
 
 ## Install
 ```bash
@@ -8,11 +8,15 @@ npm install                     # install node modules
 npm run sequelize db:migrate    # run database migrations
 ```
 
-## Start Electron app
+## Development
 ```bash
-ng build -w                     # build Angular app and save in dist folder
-npm run electron-app            # start Electron app
+ng build -w                     # build angular app and save in dist folder
+npm run electron-app            # start electron app
 ```
+> It's possible to open app in browser, but functionality related with database and node modules will not work
+
+## Production
+_in progress_
 
 ## Issues
 
