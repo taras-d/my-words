@@ -7,70 +7,75 @@
   positionTop="100"
   (onHide)="onHidden()">
 
-  <div class="words">
-    <!-- Word form -->
-    <form class="ui-g" *ngFor="let word of words; let i = index">
-      <!-- Text -->
-      <div class="ui-g-4">
-        <textarea 
-          pInputTextarea 
-          rows="2"
-          placeholder="Enter word"
-          name="text"
-          [(ngModel)]="word.text"
-          mwNotEmpty>
-        </textarea>
-      </div>
-      <!-- Translation -->
-      <div class="ui-g-5">
-        <textarea 
-          pInputTextarea 
-          rows="2"
-          placeholder="Enter translation"
-          name="translation"
-          [(ngModel)]="word.translation">
-        </textarea>
-      </div>
-      <!-- Repeat -->
-      <div class="ui-g-2">
-        <p-checkbox
-          label="Repeat"
-          name="repeat"
-          [binary]="true"
-          [(ngModel)]="word.repeat">
-        </p-checkbox>
-      </div>
-      <!-- Remove -->
-      <div class="ui-g-1 text-right">
-        <p-button
-          *ngIf="i !== 0"
-          icon="fa fa-fw fa-trash-o"
+  <ng-container *ngIf="visible">
+
+    <div class="words">
+      <!-- Word form -->
+      <form class="ui-g" *ngFor="let word of words; let i = index">
+        <!-- Text -->
+        <div class="ui-g-4">
+          <textarea 
+            pInputTextarea 
+            rows="2"
+            placeholder="Enter word"
+            name="text"
+            [(ngModel)]="word.text"
+            mwNotEmpty>
+          </textarea>
+        </div>
+        <!-- Translation -->
+        <div class="ui-g-5">
+          <textarea 
+            pInputTextarea 
+            rows="2"
+            placeholder="Enter translation"
+            name="translation"
+            [(ngModel)]="word.translation">
+          </textarea>
+        </div>
+        <!-- Repeat -->
+        <div class="ui-g-2">
+          <p-checkbox
+            label="Repeat"
+            name="repeat"
+            [binary]="true"
+            [(ngModel)]="word.repeat">
+          </p-checkbox>
+        </div>
+        <!-- Remove -->
+        <div class="ui-g-1 text-right">
+          <p-button
+            *ngIf="i !== 0"
+            icon="fa fa-fw fa-trash-o"
+            styleClass="ui-button-secondary"
+            (click)="onRemoveWord(i)">
+          </p-button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Actions -->
+    <div class="ui-g actions">
+      <div class="ui-g-6 text-left">
+        <p-button 
+          label="Add word" 
+          icon="fa fa-plus"
           styleClass="ui-button-secondary"
-          (click)="onRemoveWord(i)">
+          (click)="onAddWord()">
         </p-button>
       </div>
-    </form>
-  </div>
-
-  <!-- Actions -->
-  <div class="ui-g actions">
-    <div class="ui-g-6 text-left">
-      <p-button 
-        label="Add word" 
-        icon="fa fa-plus"
-        styleClass="ui-button-secondary"
-        (click)="onAddWord()">
-      </p-button>
+      <div class="ui-g-6 text-right">
+        <p-button 
+          label="Save words"
+          icon="fa fa-save"
+          [disabled]="!valid()"
+          (click)="onSave()">
+        </p-button>
+      </div>
     </div>
-    <div class="ui-g-6 text-right">
-      <p-button 
-        label="Save words"
-        icon="fa fa-save"
-        (click)="onSave()">
-      </p-button>
-    </div>
-  </div>
 
-  <mw-loader [visible]="saving" [expand]="true"></mw-loader>
+    <mw-loader [visible]="saving" [expand]="true"></mw-loader>
+
+  </ng-container>
 
 </p-dialog>

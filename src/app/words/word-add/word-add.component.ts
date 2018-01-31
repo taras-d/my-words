@@ -76,15 +76,18 @@ export class WordAddComponent
     this.words.push({ text: '', translation: '', repeat: false });
   }
 
+  onRemoveWord(index: number): void {
+    this.words.splice(index, 1);
+  }
+
   onSave(): void {
-    const valid = !this.forms.some(form => form.invalid);
-    if (valid) {
+    if (this.valid()) {
       this.request.invoke('createWords');
     }
   }
 
-  onRemoveWord(index: number): void {
-    this.words.splice(index, 1);
+  valid(): boolean {
+    return this.forms && !this.forms.some(f => f.invalid);
   }
 
 }
