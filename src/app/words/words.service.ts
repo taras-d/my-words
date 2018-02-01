@@ -31,9 +31,41 @@ export class WordsService {
 
     }
 
-    createWords(words: Word[]): Observable<null> {
+    createWords(words: Word[]): Observable<{ added: number, skipped: number }> {
+        if (!words.length) {
+            return Observable.of(null);
+        }
+
+        // Trim word text and skip duplicated words
+        let unique = [];
+        words.forEach(w => {
+            w.text = w.text.trim();
+            if (!unique.find(u => u.text === w.text)) {
+                unique.push(w);
+            }
+        });
+
         return this.getDB().mergeMap(conn => {
-            return this.toObs( conn.words.bulkCreate(words) ).mapTo(null)
+            return Observable.fromPromise(
+                conn.words.findAll({
+                    raw: true,
+                    attributes: ['text'],
+                    where: {
+                        text: {
+                            [conn.Sequelize.Op.in]: unique.map(u => u.text)
+                        }
+                    }
+                })
+            ).mergeMap((exists: Word[]) => {
+                unique = unique.filter(u => !exists.find(e => e.text === u.text));
+                return this.toObs( conn.words.bulkCreate(unique) )
+                    .map(added => {
+                        return { 
+                            added: added.length, 
+                            skipped: words.length - added.length
+                        }
+                    });
+            });
         });
     }
 
@@ -96,6 +128,7 @@ export class WordsService {
     }
 
     updateWord(word: Word): Observable<null> {
+        word.text = word.text.trim();
         return this.getDB().mergeMap(conn => {
             return this.toObs(
                 conn.words.update(word, {

@@ -41,9 +41,12 @@ export class WordAddComponent
         this.saving = true;
         return this.wordsService.createWords(this.words);
       },
-      done: () => {
+      done: result => {
         this.visible = false;
         this.complete.emit();
+        this.messageService.add({
+          severity: 'info', detail: `Added words: ${result.added}, skipped words: ${result.skipped}`
+        });
       },
       fail: (error: Error) => this.messageService.add({
         severity: 'error', detail: error.message
