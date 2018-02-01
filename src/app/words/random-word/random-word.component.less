@@ -1,4 +1,5 @@
 @import 'variables';
+@import (reference) 'utils';
 
 :host {
     display: block;
@@ -13,9 +14,11 @@
         margin-bottom: 8px;
         color: @c-scorpion;
         font-size: 32px;
+        .text-break;
     }
     .word-hint {
         margin-bottom: 12px;
         font-style: italic;
+        .text-break;
     }
 }

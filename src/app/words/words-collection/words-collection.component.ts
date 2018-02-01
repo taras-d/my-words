@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
-import { RequestHelper } from '../../core/utils';
+import { RequestHelper, ellipsis } from '../../core/utils';
 
 import { WordEditComponent } from '../word-edit/word-edit.component';
 import { WordAddComponent } from '../word-add/word-add.component';
@@ -117,7 +117,7 @@ export class WordsCollectionComponent
 
   onWordDelete(word: Word): void {
     this.confirmationService.confirm({
-      message: `Are you really want to delete word "${word.text}"?`,
+      message: `Are you really want to delete word "${ellipsis(word.text)}"?`,
       accept: () => this.request.invoke('deleteWord', word.id)
     });
   }

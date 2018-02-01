@@ -50,8 +50,8 @@
     </ng-template>
     <ng-template pTemplate="body" let-word>
         <tr>
-            <td>{{word.text}}</td>
-            <td>{{word.translation}}</td>
+            <td class="text-break">{{word.text}}</td>
+            <td class="text-break">{{word.translation}}</td>
             <td>{{word.repeat == 1? 'yes': 'no'}}</td>
             <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
                 {{word.createdAtRelative}}
@@ -80,7 +80,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="4">No words</td>
+            <td colspan="5">No words</td>
         </tr>
     </ng-template>
     <ng-template pTemplate="summary">

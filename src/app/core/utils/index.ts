@@ -16,9 +16,15 @@ const openInGoogleTranslate = (value: string) => {
     }
 };
 
+const ellipsis = (value: string, max: number = 50): string => {
+    return (value && value.length > max) ?
+        value.slice(0, max - 3) + '...': value;
+};
+
 export {
     isElectron,
     requireNM,
     openInGoogleTranslate,
+    ellipsis,
     RequestHelper
 };
