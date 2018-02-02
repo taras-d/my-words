@@ -21,10 +21,27 @@ const ellipsis = (value: string, max: number = 50): string => {
         value.slice(0, max - 3) + '...': value;
 };
 
+const trimValues = (
+    obj: {[key: string]: any}, 
+    ...keys: string[]
+): {[key: string]: any} => {
+    obj = Object.assign({}, obj);
+    
+    keys.forEach(key => {
+        const val = obj[key];
+        if (typeof val === 'string') {
+            obj[key] = val.trim();
+        }
+    });
+
+    return obj;
+};
+
 export {
     isElectron,
     requireNM,
     openInGoogleTranslate,
     ellipsis,
+    trimValues,
     RequestHelper
 };

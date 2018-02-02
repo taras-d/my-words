@@ -44,8 +44,11 @@ export class WordAddComponent
       done: result => {
         this.visible = false;
         this.complete.emit();
+
+        const { added, skipped } = result;
         this.messageService.add({
-          severity: 'info', detail: `Added words: ${result.added}, skipped words: ${result.skipped}`
+          severity: 'info', 
+          detail: `Added words: ${added}, skipped words: ${result.skipped}`
         });
       },
       fail: (error: Error) => this.messageService.add({

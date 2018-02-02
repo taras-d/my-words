@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
 import { DBService, DBConnection } from '../core/db.service';
+import { trimValues } from '../core/utils';
 
 export interface Word {
     id?: string;
@@ -31,40 +32,55 @@ export class WordsService {
 
     }
 
+    createWord(word: Word): Observable<any> {
+        word = trimValues(word, 'text', 'translation') as Word;
+
+        return this.getDB().mergeMap(db => {
+            const exist = db.words.findOne({
+                raw: true,
+                where: {
+                    text: {
+                        [db.Sequelize.Op.like]: db.Sequelize.literal(
+                            `'${this.dbService.escapeValue(word.text)}' ${this.dbService.escapeToken()}`
+                        )
+                    }
+                }
+            });
+
+            return this.toObs(exist).mergeMap(existWord => {
+                if (existWord) {
+                    return this.throwWordExistError(word);
+                } else {
+                    return this.toObs(db.words.create(word)).mapTo(null);
+                }
+            })
+        });
+    }
+
     createWords(words: Word[]): Observable<{ added: number, skipped: number }> {
         if (!words.length) {
-            return Observable.of(null);
+            return Observable.of({ added: 0, skipped: 0 });
         }
 
-        // Trim word text and skip duplicated words
         let unique = [];
         words.forEach(w => {
-            w.text = w.text.trim();
-            if (!unique.find(u => u.text === w.text)) {
+            if (!unique.find(u => u.text.toLowerCase() === w.text.toLowerCase())) {
                 unique.push(w);
             }
         });
 
-        return this.getDB().mergeMap(conn => {
-            return Observable.fromPromise(
-                conn.words.findAll({
-                    raw: true,
-                    attributes: ['text'],
-                    where: {
-                        text: {
-                            [conn.Sequelize.Op.in]: unique.map(u => u.text)
-                        }
-                    }
-                })
-            ).mergeMap((exists: Word[]) => {
-                unique = unique.filter(u => !exists.find(e => e.text === u.text));
-                return this.toObs( conn.words.bulkCreate(unique) )
-                    .map(added => {
-                        return { 
-                            added: added.length, 
-                            skipped: words.length - added.length
-                        }
-                    });
+        let added = 0;
+
+        return Observable.forkJoin(
+            unique.map(word => {
+                return this.createWord(word)
+                    .do(() => added++)
+                    .catch(err => Observable.of(null));
+            })
+        ).mergeMap(() => {
+            return Observable.of({ 
+                added,
+                skipped: words.length - added
             });
         });
     }
@@ -74,7 +90,7 @@ export class WordsService {
         filters?: { [key: string]: any },
         sort?: { column: string, order: number }[]
     ): Observable<WordsResponse> {
-        return this.getDB().mergeMap(conn => {
+        return this.getDB().mergeMap(db => {
             const query: any = {
                 raw: true,
                 where: {},
@@ -103,7 +119,7 @@ export class WordsService {
                 }
             }
 
-            return this.toObs( conn.words.findAndCountAll(query) ).map((res: any) => {
+            return this.toObs( db.words.findAndCountAll(query) ).map((res: any) => {
                 res.rows.forEach(row => {
                     row.createdAtRelative = moment( new Date(row.createdAt) ).fromNow();
                     row.updatedAtRelative = moment( new Date(row.updatedAt) ).fromNow();
@@ -120,28 +136,48 @@ export class WordsService {
     }
 
     getRandomWord(): Observable<Word> {
-        return this.getDB().mergeMap(conn => {
+        return this.getDB().mergeMap(db => {
             return this.toObs(
-                conn.sequelize.query('SELECT * FROM words ORDER BY RANDOM() LIMIT 1')
+                db.sequelize.query('SELECT * FROM words ORDER BY RANDOM() LIMIT 1')
             ).map((response: any) => response[0][0] || null);
         });
     }
 
     updateWord(word: Word): Observable<null> {
-        word.text = word.text.trim();
-        return this.getDB().mergeMap(conn => {
-            return this.toObs(
-                conn.words.update(word, {
-                    where: { id: word.id }
-                })
-            ).mapTo(null);
+        word = trimValues(word, 'text', 'translation') as Word;
+        
+        return this.getDB().mergeMap(db => {
+            const exist = db.words.findOne({
+                attributes: ['id'],
+                raw: true,
+                where: {
+                    text: {
+                        [db.Sequelize.Op.like]: db.Sequelize.literal(
+                            `'${this.dbService.escapeValue(word.text)}' ${this.dbService.escapeToken()}`
+                        )
+                    },
+                    id: {
+                        [db.Sequelize.Op.ne]: word.id
+                    }
+                }
+            });
+
+            return this.toObs(exist).mergeMap(existWord => {
+                if (existWord) {
+                    return this.throwWordExistError(word);
+                } else {
+                    return this.toObs(
+                        db.words.update(word, { where: { id: word.id } })
+                    ).mapTo(null);
+                }
+            });
         });
     }
 
     deleteWord(id: string): Observable<null> {
-        return this.getDB().mergeMap(conn => {
+        return this.getDB().mergeMap(db => {
             return this.toObs(
-                conn.words.destroy({ where: { id } })
+                db.words.destroy({ where: { id } })
             ).mapTo(null);
         });
     }
@@ -151,7 +187,11 @@ export class WordsService {
     }
 
     private toObs(promise: Promise<any>): Observable<any> {
-        return this.dbService.primiseToObservable(promise);
+        return this.dbService.toObservable(promise);
     }
+
+    private throwWordExistError(word: Word): Observable<Error> {
+        return Observable.throw(new Error(`Word "${word.text}" already exist`));
+    };
 
 }

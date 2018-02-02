@@ -33,8 +33,8 @@ export class DBService {
         }
     }
 
-    // Convert database promise to observable and run within Angular zone
-    primiseToObservable(promise: Promise<any>): Observable<any> {
+    // Convert database promise to observable that runs within Angular zone
+    toObservable(promise: Promise<any>): Observable<any> {
         return new Observable(obs => {
             promise.then(val => {
                 this.zone.run(() => {
@@ -53,19 +53,25 @@ export class DBService {
         const { Op, literal } = this.connection.Sequelize;
         switch (matchMode) {
             case 'startsWith':
-                return { [Op.like]: literal(`'${this.escapeLike(value)}%' ESCAPE '\\'`) };
+                return { [Op.like]: literal(`'${this.escapeValue(value)}%' ${this.escapeToken()}`) };
             case 'endsWith':
-                return { [Op.like]: literal(`'%${this.escapeLike(value)}' ESCAPE '\\'`) };
+                return { [Op.like]: literal(`'%${this.escapeValue(value)}' ${this.escapeToken()}`) };
             case 'contains':
-                return { [Op.like]: literal(`'%${this.escapeLike(value)}%' ESCAPE '\\'`) };
+                return { [Op.like]: literal(`'%${this.escapeValue(value)}%' ${this.escapeToken()}`) };
             case 'equals':
             default:
                 return { [Op.eq]: value };
         }
     }
 
-    private escapeLike(value: string): string {
-        return value.replace(/(%|_)/g, '\\$1');
+    escapeValue(value: string): string {
+        value = value.replace(/(%|_)/g, '\\$1');
+        value = value.replace(/\'/g, '\'\'$1');
+        return value;
+    }
+
+    escapeToken(): string {
+        return `ESCAPE '\\'`;
     }
 
 }
