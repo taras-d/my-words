@@ -19,11 +19,6 @@ export class WordsComponent {
       label: 'Random',
       icon: 'fa-random',
       routerLink: '/words/random'
-    },
-    {
-      label: 'Stats',
-      icon: 'fa-bar-chart',
-      routerLink: '/words/stats'
     }
   ];
 
