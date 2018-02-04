@@ -38,12 +38,11 @@ export class WordsService {
         return this.getDB().mergeMap(db => {
             const exist = db.words.findOne({
                 raw: true,
+                attributes: ['id'],
                 where: {
-                    text: {
-                        [db.Sequelize.Op.like]: db.Sequelize.literal(
-                            `'${this.dbService.escapeValue(word.text)}' ${this.dbService.escapeToken()}`
-                        )
-                    }
+                    text: db.Sequelize.literal(
+                        `text = '${DBService.escape(word.text)}' ${DBService.collateClause('NOCASE')}`
+                    )
                 }
             });
 
@@ -151,11 +150,9 @@ export class WordsService {
                 attributes: ['id'],
                 raw: true,
                 where: {
-                    text: {
-                        [db.Sequelize.Op.like]: db.Sequelize.literal(
-                            `'${this.dbService.escapeValue(word.text)}' ${this.dbService.escapeToken()}`
-                        )
-                    },
+                    text: db.Sequelize.literal(
+                        `text = '${DBService.escape(word.text)}' ${DBService.collateClause('NOCASE')}`
+                    ),
                     id: {
                         [db.Sequelize.Op.ne]: word.id
                     }

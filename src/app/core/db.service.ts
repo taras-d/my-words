@@ -50,28 +50,36 @@ export class DBService {
     }
 
     getColumnFilter({ matchMode, value }): { [key: string]: any } {
-        const { Op, literal } = this.connection.Sequelize;
+        const { Op, literal } = this.connection.Sequelize,
+            { escape, escapeClause } = DBService;
+
         switch (matchMode) {
             case 'startsWith':
-                return { [Op.like]: literal(`'${this.escapeValue(value)}%' ${this.escapeToken()}`) };
+                return { [Op.like]: literal(`'${escape(value, true)}%' ${escapeClause()}`) };
             case 'endsWith':
-                return { [Op.like]: literal(`'%${this.escapeValue(value)}' ${this.escapeToken()}`) };
+                return { [Op.like]: literal(`'%${escape(value, true)}' ${escapeClause()}`) };
             case 'contains':
-                return { [Op.like]: literal(`'%${this.escapeValue(value)}%' ${this.escapeToken()}`) };
+                return { [Op.like]: literal(`'%${escape(value, true)}%' ${escapeClause()}`) };
             case 'equals':
             default:
                 return { [Op.eq]: value };
         }
     }
 
-    escapeValue(value: string): string {
-        value = value.replace(/(%|_)/g, '\\$1');
+    static escape(value: string, like: boolean = false): string {
+        if (like) {
+            value = value.replace(/(%|_)/g, '\\$1');
+        }
         value = value.replace(/\'/g, '\'\'$1');
         return value;
     }
 
-    escapeToken(): string {
+    static escapeClause(): string {
         return `ESCAPE '\\'`;
+    };
+
+    static collateClause(collate: string): string {
+        return `COLLATE ${collate}`;
     }
 
 }
