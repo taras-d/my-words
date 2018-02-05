@@ -1,19 +1,12 @@
 import { RequestHelper } from './requestHelper';
 
-const isElectron = () => navigator.userAgent.indexOf('Electron/') > -1;
-
-const requireNM = (path: string) => {
+const nodeRequire = (path: string) => {
     return window['require'](path);
 };
 
 const openInGoogleTranslate = (value: string) => {
-    const url = `https://translate.google.com/#en/auto/${value}`;
-    if (isElectron()) {
-        const { shell } = requireNM('electron');
-        shell.openExternal(url);
-    } else {
-        window.open(url);
-    }
+    const { shell } = nodeRequire('electron');
+    shell.openExternal(`https://translate.google.com/#en/auto/${value}`);
 };
 
 const ellipsis = (value: string, max: number = 50): string => {
@@ -38,8 +31,7 @@ const trimValues = (
 };
 
 export {
-    isElectron,
-    requireNM,
+    nodeRequire,
     openInGoogleTranslate,
     ellipsis,
     trimValues,

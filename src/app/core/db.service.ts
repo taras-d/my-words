@@ -2,7 +2,9 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
-import { isElectron, requireNM } from './utils';
+import { MessageService } from 'primeng/components/common/messageservice';
+
+import { nodeRequire } from './utils';
 
 export interface DBConnection {
     Sequelize: any;
@@ -15,22 +17,18 @@ export class DBService {
 
     private connection: DBConnection;
 
-    constructor(private zone: NgZone) {
-
+    constructor(
+        private zone: NgZone,
+        private messageService: MessageService
+    ) {
+    
     }
 
-    // Get database connection
-    getConnection(): Observable<DBConnection> {
-        if (this.connection) {
-            return Observable.of(this.connection);
+    getConnection() {
+        if (!this.connection) {
+            this.connection = nodeRequire('../db/models');
         }
-
-        if (isElectron()) {
-            this.connection = requireNM('../db/models');
-            return Observable.of(this.connection);
-        } else {
-            return Observable.throw(new Error('Cannot connect to database'));
-        }
+        return this.connection;
     }
 
     // Convert database promise to observable that runs within Angular zone
