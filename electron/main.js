@@ -34,11 +34,11 @@ const setApplicationMenu = () => {
 const menuItemClick = (item, browserWindow, event) => {
     switch (item.tag) {
         case 'import':
-            browserWindow.webContents.send('import');
+            browserWindow.webContents.send('menu-import');
             break;
 
         case 'export':
-            browserWindow.webContents.send('export');
+            browserWindow.webContents.send('menu-export');
             break;
 
         case 'about':
