@@ -70,13 +70,13 @@ export class WordsService {
 
         let added = 0;
 
-        return Observable.forkJoin(
-            unique.map(word => {
+        return Observable.concat(
+            ...unique.map(word => {
                 return this.createWord(word)
                     .do(() => added++)
                     .catch(err => Observable.of(null));
             })
-        ).mergeMap(() => {
+        ).last().mergeMap(() => {
             return Observable.of({ 
                 added,
                 skipped: words.length - added
