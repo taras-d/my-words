@@ -1,6 +1,4 @@
-const { app, BrowserWindow, Menu, shell } = require('electron'),
-    path = require('path'),
-    url = require('url');
+const { app, BrowserWindow, Menu, shell } = require('electron');
 
 const setApplicationMenu = () => {
     const template = [
@@ -36,9 +34,13 @@ const setApplicationMenu = () => {
 const menuItemClick = (item, browserWindow, event) => {
     switch (item.tag) {
         case 'import':
-        case 'export':
-            browserWindow.webContents.send('app-menu-click', item.tag);
+            browserWindow.webContents.send('import');
             break;
+
+        case 'export':
+            browserWindow.webContents.send('export');
+            break;
+
         case 'about':
             shell.openExternal('https://github.com/taras-d/my-words#my-words');
             break;
@@ -50,13 +52,11 @@ const createWindow = () => {
         width: 800, 
         height: 600,
         minWidth: 800,
-        minHeight: 600
+        minHeight: 600,
+        show: false
     });
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, '../dist/index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
+    win.loadURL(`file://${__dirname}/../dist/index.html`);
+    win.on('ready-to-show', () => win.show());
 };
 
 app.on('ready', () => {
