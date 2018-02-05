@@ -10,6 +10,7 @@ import { WordEditComponent } from './word-edit/word-edit.component';
 import { WordAddComponent } from './word-add/word-add.component';
 
 import { WordsService } from './words.service';
+import { WordsImportService } from './words-import.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { WordsService } from './words.service';
     WordAddComponent
   ],
   providers: [
-    WordsService
+    WordsService,
+    WordsImportService
   ]
 })
 export class WordsModule { }
