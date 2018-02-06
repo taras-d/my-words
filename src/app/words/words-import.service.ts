@@ -71,7 +71,7 @@ export class WordsImportService {
                 where[db.Sequelize.Op.or].id = word.id;
             }
 
-            return Observable.fromPromise(
+            return this.dbService.toObservable(
                 db.words.findOne({ attributes: ['id'], raw: true, where }).then(res => {
                     return res ? null : db.words.create(word).then(() => imported++)
                 })
@@ -125,7 +125,7 @@ export class WordsImportService {
                 this.events.next('import-end');
                 this.messagesService.add({
                     severity: "info", 
-                    detail: `Imported: ${result.imported}, skipped: ${result.skipped}`
+                    detail: `Imported ${result.imported}, skipped ${result.skipped} words`
                 });
             });
         });
@@ -146,7 +146,7 @@ export class WordsImportService {
                 this.events.next('export-end');
                 this.messagesService.add({
                     severity: "info", 
-                    detail: `Exported ${count} word(s)`
+                    detail: `Exported ${count} words`
                 });
             });
         });

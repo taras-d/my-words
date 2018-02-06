@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { DBService, DBConnection } from '../core/db.service';
 import { trimValues } from '../core/utils';
+import { WordsImportService } from './words-import.service';
 
 export interface Word {
     id?: string;
@@ -30,60 +31,16 @@ export class WordsService {
 
     private db: DBConnection;
 
-    constructor(private dbService: DBService) {
+    constructor(
+        private dbService: DBService,
+        private wordsImportService: WordsImportService
+    ) {
         this.db = this.dbService.getConnection();
     }
 
-    createWord(word: Word): Observable<any> {
-        word = trimValues(word, 'text', 'translation') as Word;
 
-        const db = this.db;
-
-        const exist = db.words.findOne({
-            raw: true,
-            attributes: ['id'],
-            where: {
-                text: db.Sequelize.literal(
-                    `text = '${DBService.escape(word.text)}' ${DBService.collateClause('NOCASE')}`
-                )
-            }
-        });
-
-        return this.toObs(exist).mergeMap(existWord => {
-            if (existWord) {
-                return this.throwWordExistError(word);
-            } else {
-                return this.toObs(db.words.create(word)).mapTo(null);
-            }
-        });
-    }
-
-    createWords(words: Word[]): Observable<{ added: number, skipped: number }> {
-        if (!words.length) {
-            return Observable.of({ added: 0, skipped: 0 });
-        }
-
-        let unique = [];
-        words.forEach(w => {
-            if (!unique.find(u => u.text.toLowerCase() === w.text.toLowerCase())) {
-                unique.push(w);
-            }
-        });
-
-        let added = 0;
-
-        return Observable.concat(
-            ...unique.map(word => {
-                return this.createWord(word)
-                    .do(() => added++)
-                    .catch(err => Observable.of(null));
-            })
-        ).last().mergeMap(() => {
-            return Observable.of({ 
-                added,
-                skipped: words.length - added
-            });
-        });
+    createWords(words: Word[]): Observable<{ imported: number, skipped: number }> {
+        return this.wordsImportService.bulkCreate(words);
     }
 
     getWords(

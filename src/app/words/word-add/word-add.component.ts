@@ -1,6 +1,6 @@
 import { 
   Component, OnInit, OnDestroy, ViewChildren, QueryList, 
-  Output, EventEmitter 
+  Output, EventEmitter
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
@@ -45,10 +45,9 @@ export class WordAddComponent
         this.visible = false;
         this.complete.emit();
 
-        const { added, skipped } = result;
         this.messageService.add({
           severity: 'info', 
-          detail: `Added words: ${added}, skipped words: ${result.skipped}`
+          detail: `Added ${result.imported}, skipped ${result.skipped} words`
         });
       },
       fail: (error: Error) => this.messageService.add({
