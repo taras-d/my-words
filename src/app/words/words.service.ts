@@ -101,7 +101,7 @@ export class WordsService {
         word = trimValues(word, 'text', 'translation') as Word;
 
         const db = this.db;
-        
+
         const exist = db.words.findOne({
             attributes: ['id'],
             raw: true,
@@ -138,6 +138,6 @@ export class WordsService {
 
     private throwWordExistError(word: Word): Observable<Error> {
         return Observable.throw(new Error(`Word "${word.text}" already exist`));
-    };
+    }
 
 }

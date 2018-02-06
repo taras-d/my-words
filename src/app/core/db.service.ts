@@ -17,11 +17,27 @@ export class DBService {
 
     private connection: DBConnection;
 
+    static escape(value: string, like: boolean = false): string {
+        if (like) {
+            value = value.replace(/(%|_)/g, '\\$1');
+        }
+        value = value.replace(/\'/g, '\'\'$1');
+        return value;
+    }
+
+    static escapeClause(): string {
+        return `ESCAPE '\\'`;
+    }
+
+    static collateClause(collate: string): string {
+        return `COLLATE ${collate}`;
+    }
+
     constructor(
         private zone: NgZone,
         private messageService: MessageService
     ) {
-    
+
     }
 
     getConnection() {
@@ -62,22 +78,6 @@ export class DBService {
             default:
                 return { [Op.eq]: value };
         }
-    }
-
-    static escape(value: string, like: boolean = false): string {
-        if (like) {
-            value = value.replace(/(%|_)/g, '\\$1');
-        }
-        value = value.replace(/\'/g, '\'\'$1');
-        return value;
-    }
-
-    static escapeClause(): string {
-        return `ESCAPE '\\'`;
-    };
-
-    static collateClause(collate: string): string {
-        return `COLLATE ${collate}`;
     }
 
 }

@@ -73,7 +73,7 @@ export class WordsImportService {
 
             return this.dbService.toObservable(
                 db.words.findOne({ attributes: ['id'], raw: true, where }).then(res => {
-                    return res ? null : db.words.create(word).then(() => imported++)
+                    return res ? null : db.words.create(word).then(() => imported++);
                 })
             );
         };
@@ -98,8 +98,8 @@ export class WordsImportService {
         });
 
         ipcRenderer.on('menu-export', () => {
-            const path = remote.dialog.showSaveDialog({ 
-                filters, defaultPath: `words-${new Date().getTime()}.json` 
+            const path = remote.dialog.showSaveDialog({
+                filters, defaultPath: `words-${new Date().getTime()}.json`
             });
             if (path) {
                 this.exportWords(path);
@@ -113,10 +113,10 @@ export class WordsImportService {
         const readFile = Observable.bindNodeCallback(fs.readFile) as any;
 
         readFile(path, 'utf8').mergeMap(data => {
-            try { 
-                data = JSON.parse(data) || []; 
-            } catch { 
-                data = []; 
+            try {
+                data = JSON.parse(data) || [];
+            } catch {
+                data = [];
             }
 
             return this.bulkCreate(data);
@@ -124,7 +124,7 @@ export class WordsImportService {
             this.zone.run(() => {
                 this.events.next('import-end');
                 this.messagesService.add({
-                    severity: "info", 
+                    severity: 'info',
                     detail: `Imported ${result.imported}, skipped ${result.skipped} words`
                 });
             });
@@ -145,11 +145,11 @@ export class WordsImportService {
             this.zone.run(() => {
                 this.events.next('export-end');
                 this.messagesService.add({
-                    severity: "info", 
+                    severity: 'info',
                     detail: `Exported ${count} words`
                 });
             });
         });
     }
-    
+
 }

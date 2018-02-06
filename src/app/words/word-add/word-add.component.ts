@@ -1,5 +1,5 @@
-import { 
-  Component, OnInit, OnDestroy, ViewChildren, QueryList, 
+import {
+  Component, OnInit, OnDestroy, ViewChildren, QueryList,
   Output, EventEmitter
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -33,7 +33,7 @@ export class WordAddComponent
     private wordsService: WordsService,
     private messageService: MessageService
   ) {
-    
+
     this.request = new RequestHelper();
 
     this.request.method('createWords', {
@@ -46,7 +46,7 @@ export class WordAddComponent
         this.complete.emit();
 
         this.messageService.add({
-          severity: 'info', 
+          severity: 'info',
           detail: `Added ${result.imported}, skipped ${result.skipped} words`
         });
       },
