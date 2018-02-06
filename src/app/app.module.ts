@@ -10,6 +10,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/concat';
 import 'rxjs/add/observable/bindNodeCallback';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/defer';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
