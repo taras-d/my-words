@@ -18,6 +18,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/last';
+import 'rxjs/add/operator/filter';
 
 import { AppRoutingModule } from './app-routing.module';
 

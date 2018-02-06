@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
 
+import { Subscription } from 'rxjs/Subscription';
+
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from 'primeng/api';
 
 import { WordsService, Word } from '../words.service';
+import { WordsImportService } from '../words-import.service';
 import { RequestHelper, ellipsis } from '../../core/utils';
 
 import { WordEditComponent } from '../word-edit/word-edit.component';
@@ -30,8 +33,11 @@ export class WordsCollectionComponent
 
   request: RequestHelper;
 
+  importEnd: Subscription;
+
   constructor(
     private wordsService: WordsService,
+    private wordsImportService: WordsImportService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {
@@ -71,6 +77,10 @@ export class WordsCollectionComponent
         this.request.invoke('getWords');
       }
     });
+
+    this.importEnd = this.wordsImportService.events
+      .filter(e => e === 'import-end')
+      .subscribe(() => this.request.invoke('getWords'));
   }
 
   ngOnInit(): void {
@@ -79,6 +89,7 @@ export class WordsCollectionComponent
 
   ngOnDestroy(): void {
     this.request.cancelAll();
+    this.importEnd.unsubscribe();
   }
 
   loadWords(): void {
