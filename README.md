@@ -10,13 +10,15 @@ npm run sequelize db:migrate    # run database migrations
 
 ## Development
 ```bash
-ng build -w                     # build angular app and save in dist folder
+ng build -w                     # build angular app
 npm run electron-app            # start electron app
 ```
-> It's possible to open app in browser, but functionality related with database and node modules will not work
 
 ## Production
-_in progress_
+```bash
+ng build --prod                 # build angular app for production
+npm run electron-package        # package electron app
+```
 
 ## Issues
 
