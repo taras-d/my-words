@@ -1,15 +1,10 @@
-const common = {
-  dialect: 'sqlite',
-  migrationStorageTableName: '_migrations',
-  operatorsAliases: false
+const path = require('path');
+
+module.exports = {
+  development: {
+    dialect: 'sqlite',
+    migrationStorageTableName: '_migrations',
+    operatorsAliases: false,
+    storage: path.join(__dirname, 'db.sqlite')
+  }
 };
-
-const development = Object.assign({}, common, {
-  storage: 'db/dev.sqlite'
-});
-
-const production = Object.assign({}, common, {
-  storage: 'db/db.sqlite'
-});
-
-module.exports = { development, production };
