@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CardModule } from 'primeng/card';
@@ -48,11 +48,13 @@ const components = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ...primeNgModules
   ],
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ...primeNgModules,
     ...directives,
     ...components

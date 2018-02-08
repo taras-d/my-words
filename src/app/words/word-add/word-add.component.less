@@ -1,34 +1,36 @@
-.words {
+ul.words {
     max-height: 220px;
     overflow: auto;
-    margin-bottom: 15px;
-    form {
-        div[class^="ui-g-"] {
-            padding: 2px 4px;
-            height: 44px;
-            &:after {
-                content: "";
-                display: inline-block;
-                height: 100%;
-                vertical-align: middle;
-            }
-            > * {
-                display: inline-block;
-                vertical-align: middle;
-            }
+    padding: 0;
+    margin: 0;
+    div[class^="ui-g-"] {
+        padding: 2px 4px;
+        height: 44px;
+        &:after {
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
         }
-        textarea {
-            width: 100%;
-            resize: none;
-            padding: 1px 6px;
+        > * {
+            display: inline-block;
+            vertical-align: middle;
         }
-        p-checkbox {
-            height: 26px;
-        }
+    }
+    textarea {
+        width: 100%;
+        resize: none;
+        padding: 1px 6px;
+    }
+    p-checkbox {
+        height: 26px;
     }
 }
 
-.actions .ui-g-6 {
-    padding-left: 4px;
-    padding-right: 4px;
+.actions {
+    margin-top: 15px;
+    .ui-g-6 {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
 }

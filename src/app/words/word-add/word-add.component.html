@@ -7,41 +7,46 @@
   positionTop="100"
   (onHide)="onHidden()">
 
-  <ng-container *ngIf="visible">
+  <!-- Words form -->
+  <form *ngIf="wordsArray" [formGroup]="wordsArray" (ngSubmit)="onSave()">
 
-    <div class="words">
-      <!-- Word form -->
-      <form class="ui-g" *ngFor="let word of words; let i = index">
+    <!-- Words list -->
+    <ul class="words" #wordsList>
+
+      <!-- Words list item -->
+      <li 
+        class="ui-g" 
+        *ngFor="let word of wordsArray.controls; let i = index"
+        [formGroupName]="i">
         <!-- Text -->
         <div class="ui-g-4">
           <textarea 
+            [formControl]="word.controls.text"
             pInputTextarea 
             rows="2"
             placeholder="Enter word"
             name="text"
-            maxlength="200"
-            [(ngModel)]="word.text"
-            mwNotEmpty>
+            maxlength="200">
           </textarea>
         </div>
         <!-- Translation -->
         <div class="ui-g-5">
           <textarea 
+            [formControl]="word.controls.translation"
             pInputTextarea 
             rows="2"
             placeholder="Enter translation"
             name="translation"
-            maxlength="200"
-            [(ngModel)]="word.translation">
+            maxlength="200">
           </textarea>
         </div>
         <!-- Repeat -->
         <div class="ui-g-2">
           <p-checkbox
+            [formControl]="word.controls.repeat"
             label="Repeat"
             name="repeat"
-            [binary]="true"
-            [(ngModel)]="word.repeat">
+            [binary]="true">
           </p-checkbox>
         </div>
         <!-- Remove -->
@@ -53,8 +58,9 @@
             (click)="onRemoveWord(i)">
           </p-button>
         </div>
-      </form>
-    </div>
+      </li>
+    
+    </ul>
 
     <!-- Actions -->
     <div class="ui-g actions">
@@ -68,16 +74,16 @@
       </div>
       <div class="ui-g-6 text-right">
         <p-button 
+          type="submit"
           label="Save words"
           icon="fa fa-save"
-          [disabled]="!valid()"
-          (click)="onSave()">
+          [disabled]="wordsArray.invalid">
         </p-button>
       </div>
     </div>
 
-    <mw-loader [visible]="saving" [expand]="true"></mw-loader>
+  </form>
 
-  </ng-container>
+  <mw-loader [visible]="saving" [expand]="true"></mw-loader>
 
 </p-dialog>

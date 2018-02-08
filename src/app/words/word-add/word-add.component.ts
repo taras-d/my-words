@@ -1,35 +1,31 @@
-import {
-  Component, OnInit, OnDestroy, ViewChildren, QueryList,
-  Output, EventEmitter
-} from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnDestroy, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { NgForm, FormArray, FormBuilder } from '@angular/forms';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { WordsService, Word } from '../words.service';
-
-import { RequestHelper } from '../../core/utils';
+import { RequestHelper, validators } from '../../core/utils';
 
 @Component({
   selector: 'mw-word-add',
   templateUrl: './word-add.component.html',
   styleUrls: ['./word-add.component.less']
 })
-export class WordAddComponent
-  implements OnInit, OnDestroy {
+export class WordAddComponent implements OnDestroy {
 
-  @ViewChildren(NgForm) forms: QueryList<NgForm>;
+  @ViewChild('wordsList') wordsList: ElementRef;
 
   @Output() complete = new EventEmitter();
 
   visible: boolean;
   saving: boolean;
 
-  words: Word[];
+  wordsArray: FormArray;
 
   request: RequestHelper;
 
   constructor(
+    private fb: FormBuilder,
     private wordsService: WordsService,
     private messageService: MessageService
   ) {
@@ -39,7 +35,7 @@ export class WordAddComponent
     this.request.method('createWords', {
       create: () => {
         this.saving = true;
-        return this.wordsService.createWords(this.words);
+        return this.wordsService.createWords(this.wordsArray.value);
       },
       done: result => {
         this.visible = false;
@@ -56,43 +52,50 @@ export class WordAddComponent
     });
   }
 
-  ngOnInit(): void {
-    this.reset();
-  }
-
   ngOnDestroy(): void {
     this.request.cancelAll();
   }
 
-  open(): void {
-    this.visible = true;
+  createWordsArray(): void {
+    this.wordsArray = this.fb.array([
+      this.fb.group({
+        text: ['', validators.required],
+        translation: '',
+        repeat: false
+      })
+    ]);
   }
 
-  reset(): void {
-    this.saving = false;
-    this.words = [{ text: '', translation: '', repeat: false }];
+  open(): void {
+    this.visible = true;
+    this.createWordsArray();
   }
 
   onHidden(): void {
-    this.reset();
+    this.wordsArray = null;
+    this.saving = false;
   }
 
   onAddWord(): void {
-    this.words.push({ text: '', translation: '', repeat: false });
+    this.wordsArray.push(
+      this.fb.group({
+        text: ['', validators.required],
+        translation: '',
+        repeat: false
+      })
+    );
+    setTimeout(() => {
+      const el = this.wordsList.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    });
   }
 
   onRemoveWord(index: number): void {
-    this.words.splice(index, 1);
+    this.wordsArray.removeAt(index);
   }
 
   onSave(): void {
-    if (this.valid()) {
-      this.request.invoke('createWords');
-    }
-  }
-
-  valid(): boolean {
-    return this.forms && !this.forms.some(f => f.invalid);
+    this.request.invoke('createWords');
   }
 
 }

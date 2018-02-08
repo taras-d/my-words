@@ -1,4 +1,5 @@
 import { RequestHelper } from './requestHelper';
+import * as validators from './validators';
 
 const nodeRequire = (path: string) => {
     return window['require'](path);
@@ -35,5 +36,6 @@ export {
     openInGoogleTranslate,
     ellipsis,
     trimValues,
-    RequestHelper
+    RequestHelper,
+    validators
 };
