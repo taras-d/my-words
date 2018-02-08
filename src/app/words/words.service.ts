@@ -97,7 +97,7 @@ export class WordsService {
             .map((response: any) => response[0][0] || null);
     }
 
-    updateWord(word: Word): Observable<null> {
+    updateWord(id: string, word: Word): Observable<null> {
         word = trimValues(word, 'text', 'translation') as Word;
 
         const db = this.db;
@@ -109,9 +109,7 @@ export class WordsService {
                 text: db.Sequelize.literal(
                     `text = '${DBService.escape(word.text)}' ${DBService.collateClause('NOCASE')}`
                 ),
-                id: {
-                    [db.Sequelize.Op.ne]: word.id
-                }
+                id: { [db.Sequelize.Op.ne]: id }
             }
         });
 
@@ -120,7 +118,7 @@ export class WordsService {
                 return this.throwWordExistError(word);
             } else {
                 return this.toObs(
-                    db.words.update(word, { where: { id: word.id } })
+                    db.words.update(word, { where: { id } })
                 ).mapTo(null);
             }
         });

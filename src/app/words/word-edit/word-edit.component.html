@@ -7,7 +7,7 @@
   positionTop="100"
   (onHide)="onHidden()">
 
-  <form *ngIf="word" #form="ngForm" (ngSubmit)="onSubmit()">
+  <form *ngIf="wordForm" [formGroup]="wordForm" (ngSubmit)="onSubmit()">
     <div class="ui-g">
       <!-- Text -->
       <div class="ui-g-4">Word</div>
@@ -18,8 +18,7 @@
           rows="2"
           placeholder="Enter word"
           maxlength="200"
-          [(ngModel)]="word.text"
-          mwNotEmpty>
+          formControlName="text">
         </textarea>
       </div>
       <!-- Translation -->
@@ -31,7 +30,7 @@
           rows="2"
           placeholder="Enter translation"
           maxlength="200"
-          [(ngModel)]="word.translation">
+          formControlName="translation">
         </textarea>
       </div>
       <!-- Repeat -->
@@ -40,7 +39,7 @@
         <p-checkbox
           name="repeat"
           [binary]="true"
-          [(ngModel)]="word.repeat">
+          [formControl]="wordForm.controls.repeat">
         </p-checkbox>
       </div>
       <!-- Created at -->
@@ -50,7 +49,7 @@
           pInputText 
           name="createdAt"
           disabled
-          value="{{word.createdAt|date: 'dd.MM.yyy HH:mm:ss'}}">
+          value="{{word?.createdAt|date: 'dd.MM.yyy HH:mm:ss'}}">
       </div>
       <!-- Updated at -->
       <div class="ui-g-4">Updated at</div>
@@ -59,7 +58,7 @@
           pInputText 
           name="updatedAt"
           disabled
-          value="{{word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'}}">
+          value="{{word?.updatedAt|date: 'dd.MM.yyy HH:mm:ss'}}">
       </div>
       <!-- Submit -->
       <div class="ui-g-4"></div>
@@ -74,7 +73,7 @@
           styleClass="save"
           icon="fa fa-save"
           label="Save"
-          [disabled]="form.invalid">
+          [disabled]="wordForm.invalid">
         </p-button>
       </div>
     </div>

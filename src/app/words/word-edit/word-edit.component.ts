@@ -1,10 +1,11 @@
 import { Component, Output, EventEmitter, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { WordsService, Word } from '../words.service';
 
-import { RequestHelper } from '../../core/utils';
+import { RequestHelper, validators } from '../../core/utils';
 
 @Component({
   selector: 'mw-word-edit',
@@ -18,11 +19,14 @@ export class WordEditComponent implements OnDestroy {
 
   visible = false;
   saving = false;
-  word: Word = null;
+
+  word: Word;
+  wordForm: FormGroup;
 
   request: RequestHelper;
 
   constructor(
+    private fb: FormBuilder,
     private wordsService: WordsService,
     private messageService: MessageService
   ) {
@@ -32,7 +36,10 @@ export class WordEditComponent implements OnDestroy {
     this.request.method('updateWord', {
       create: () => {
         this.saving = true;
-        return this.wordsService.updateWord(this.word);
+        return this.wordsService.updateWord(
+          this.word.id,
+          this.wordForm.value
+        );
       },
       done: () => {
         this.visible = false;
@@ -45,6 +52,16 @@ export class WordEditComponent implements OnDestroy {
         this.saving = false;
       }
     });
+
+    this.createForm();
+  }
+
+  createForm(): void {
+    this.wordForm = this.fb.group({
+      text: ['', validators.required],
+      translation: '',
+      repeat: false
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,7 +70,8 @@ export class WordEditComponent implements OnDestroy {
 
   open(word: Word): void {
     this.visible = true;
-    this.word = Object.assign({}, word);
+    this.word = word;
+    this.wordForm.patchValue(word);
   }
 
   onCancel(): void {
@@ -66,7 +84,7 @@ export class WordEditComponent implements OnDestroy {
 
   onHidden(): void {
     this.saving = false;
-    this.word = null;
+    this.wordForm.reset();
     this.request.cancelAll();
   }
 
