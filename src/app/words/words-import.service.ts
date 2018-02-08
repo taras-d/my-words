@@ -28,9 +28,9 @@ export class WordsImportService {
         this.listenMenuEvents();
     }
 
-    bulkCreate(words: Word[]): Observable<{ imported: number, skipped: number }> {
+    bulkCreate(words: Word[]): Observable<{ imported: number, duplicates: number }> {
         if (!words.length) {
-            return Observable.of({ imported: 0, skipped: 0 });
+            return Observable.of({ imported: 0, duplicates: 0 });
         }
 
         // Exclude words with same id or text
@@ -83,7 +83,7 @@ export class WordsImportService {
 
         // Concatenate requests and wait when last completed
         return Observable.concat(...obs).last().map(() => {
-            return { imported, skipped: words.length - imported };
+            return { imported, duplicates: words.length - imported };
         });
     }
 
@@ -125,7 +125,7 @@ export class WordsImportService {
                 this.events.next('import-end');
                 this.messagesService.add({
                     severity: 'info',
-                    detail: `Imported ${result.imported}, skipped ${result.skipped} words`
+                    detail: `Imported: ${result.imported}, duplicates: ${result.duplicates}`
                 });
             });
         });

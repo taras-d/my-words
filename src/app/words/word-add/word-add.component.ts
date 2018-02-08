@@ -47,7 +47,7 @@ export class WordAddComponent
 
         this.messageService.add({
           severity: 'info',
-          detail: `Added ${result.imported}, skipped ${result.skipped} words`
+          detail: `Added: ${result.imported}, duplicates: ${result.duplicates}`
         });
       },
       fail: (error: Error) => this.messageService.add({

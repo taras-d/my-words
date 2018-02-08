@@ -39,7 +39,7 @@ export class WordsService {
     }
 
 
-    createWords(words: Word[]): Observable<{ imported: number, skipped: number }> {
+    createWords(words: Word[]): Observable<{ imported: number, duplicates: number }> {
         return this.wordsImportService.bulkCreate(words);
     }
 
