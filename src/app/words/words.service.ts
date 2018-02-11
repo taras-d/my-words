@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
 import { DBService, DBConnection } from '../core/db.service';
-import { trimValues } from '../core/utils';
+import { trimValues, getGoogleTranslateLink, getGoogleImagesLink } from '../core/utils';
 import { WordsImportService } from './words-import.service';
 
 export interface Word {
@@ -13,9 +13,11 @@ export interface Word {
     translation?: string;
     repeat?: boolean;
     createdAt?: Date;
-    createdAtRelative?: Date;
+    createdAtRelative?: string;
     updatedAt?: Date;
-    updatedAtRelative?: Date;
+    updatedAtRelative?: string;
+    googleTranslateLink?: string;
+    googleImagesLink?: string;
 }
 
 export interface WordsResponse {
@@ -37,7 +39,6 @@ export class WordsService {
     ) {
         this.db = this.dbService.getConnection();
     }
-
 
     createWords(words: Word[]): Observable<{ imported: number, duplicates: number }> {
         return this.wordsImportService.bulkCreate(words);
@@ -77,24 +78,32 @@ export class WordsService {
         }
 
         return this.toObs( this.db.words.findAndCountAll(query) ).map((res: any) => {
-            res.rows.forEach(row => {
-                row.createdAtRelative = moment( new Date(row.createdAt) ).fromNow();
-                row.updatedAtRelative = moment( new Date(row.updatedAt) ).fromNow();
+            const words = res.rows as Word[];
+
+            words.forEach(word => {
+                word.createdAtRelative = moment( new Date(word.createdAt) ).fromNow();
+                word.updatedAtRelative = moment( new Date(word.updatedAt) ).fromNow();
+                word.googleTranslateLink = getGoogleTranslateLink(word.text);
+                word.googleImagesLink = getGoogleImagesLink(word.text);
             });
 
             return {
                 skip: query.offset,
                 limit: query.limit,
                 total: res.count,
-                data: res.rows
+                data: words
             };
         });
     }
 
     getRandomWord(): Observable<Word> {
         const sql = 'SELECT * FROM words ORDER BY RANDOM() LIMIT 1';
-        return this.toObs(this.db.sequelize.query(sql))
-            .map((response: any) => response[0][0] || null);
+        return this.toObs(this.db.sequelize.query(sql)).map((response: any) => { 
+            const word = response[0][0] || null
+            word.googleTranslateLink = getGoogleTranslateLink(word.text);
+            word.googleImagesLink = getGoogleImagesLink(word.text);
+            return word;
+        });
     }
 
     updateWord(id: string, word: Word): Observable<null> {

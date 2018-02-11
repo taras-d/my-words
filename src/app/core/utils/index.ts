@@ -5,11 +5,6 @@ const nodeRequire = (path: string) => {
     return window['require'](path);
 };
 
-const openInGoogleTranslate = (value: string) => {
-    const { shell } = nodeRequire('electron');
-    shell.openExternal(`https://translate.google.com/#en/auto/${value}`);
-};
-
 const ellipsis = (value: string, max: number = 50): string => {
     return (value && value.length > max) ?
         value.slice(0, max - 3) + '...' : value;
@@ -31,11 +26,20 @@ const trimValues = (
     return obj;
 };
 
+const getGoogleTranslateLink = (value: string): string => {
+    return `https://translate.google.com/#en/auto/${value}`;
+};
+
+const getGoogleImagesLink = (value: string): string => {
+    return `https://google.com/search?tbm=isch&q=${value}`;
+};
+
 export {
     nodeRequire,
-    openInGoogleTranslate,
     ellipsis,
     trimValues,
+    getGoogleTranslateLink,
+    getGoogleImagesLink,
     RequestHelper,
     validators
 };

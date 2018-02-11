@@ -18,7 +18,7 @@
             <th>Translation</th>
             <th style="width: 70px;">Repeat</th>
             <th style="width: 200px;">Date</th>
-            <th style="width: 120px;"></th>
+            <th style="width: 160px;"></th>
         </tr>
         <tr>
             <th>
@@ -58,14 +58,20 @@
             </td>
             <td class="text-right">
                 <p-button
-                    title="Open in Google translate"
                     icon="fa fa-fw fa-language"
+                    title="Open in Google translate"
                     styleClass="ui-button-secondary"
-                    mwOpenInGT="{{word.text}}">
+                    [mwOpenExternal]="word.googleTranslateLink">
                 </p-button>
                 <p-button
-                    title="Edit word"
+                    icon="fa fa-fw fa-picture-o"
+                    title="Open in Google images"
+                    styleClass="ui-button-secondary"
+                    [mwOpenExternal]="word.googleImagesLink">
+                </p-button>
+                <p-button
                     icon="fa fa-fw fa-edit"
+                    title="Edit word"
                     styleClass="ui-button-secondary"
                     (onClick)="onWordEdit(word)">
                 </p-button>

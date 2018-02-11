@@ -9,17 +9,22 @@
         <p-button 
             *ngIf="word.translation"
             icon="fa fa-fw fa-question-circle-o"
-            titla="Toggle translation"
             styleClass="ui-button-secondary"
             title="{{hint? 'Hide': 'Show'}} hint"
             (onClick)="hint = !hint">
         </p-button>
         <p-button
-            icon="fa fa-fw fa-language" 
+            icon="fa fa-fw fa-language"
+            title="Open in Google translate"
             class="ui-button-secondary"
             styleClass="ui-button-secondary"
-            mwOpenInGT="{{word.text}}"
-            title="Open in Google translate">
+            [mwOpenExternal]="word.googleTranslateLink">
+        </p-button>
+        <p-button
+            icon="fa fa-fw fa-picture-o"
+            title="Open in Google images"
+            styleClass="ui-button-secondary"
+            [mwOpenExternal]="word.googleImagesLink">
         </p-button>
     </div>
 </div>

@@ -15,7 +15,7 @@ import { GrowlModule } from 'primeng/growl';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 
-import { OpenInGTDirective } from './directives/open-in-gt/open-in-gt.directive';
+import { OpenExternalDirective } from './directives/open-external/open-external.directive';
 
 import { LoaderComponent } from './components/loader/loader.component';
 
@@ -35,7 +35,7 @@ const primeNgModules = [
 ];
 
 const directives = [
-  OpenInGTDirective
+  OpenExternalDirective
 ];
 
 const components = [
