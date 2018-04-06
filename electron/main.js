@@ -50,9 +50,9 @@ const menuItemClick = (item, browserWindow, event) => {
 const createWindow = () => {
     const win = new BrowserWindow({ 
         width: 800, 
-        height: 600,
+        height: 615,
         minWidth: 800,
-        minHeight: 600,
+        minHeight: 615,
         show: false
     });
     win.loadURL(`file://${__dirname}/../dist/index.html`);
