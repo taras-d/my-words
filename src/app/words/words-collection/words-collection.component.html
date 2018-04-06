@@ -1,108 +1,117 @@
 <!-- Words table -->
 <p-table 
-    [value]="words"
-    [loading]="loading"
-    loadingIcon="fa-spinner"
-    [lazy]="true"
-    [paginator]="true"
-    [first]="paging.skip"
-    [rows]="paging.limit"
-    [totalRecords]="paging.total"
-    [filters]="filters"
-    (onFilter)="onFilterChange($event)"
-    (onPage)="onPageChange($event)"
-    #dt>
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Word</th>
-            <th>Translation</th>
-            <th style="width: 70px;">Repeat</th>
-            <th style="width: 200px;">Date</th>
-            <th style="width: 160px;"></th>
-        </tr>
-        <tr>
-            <th>
-                <input 
-                    value="{{filters.text?.value}}"
-                    placeholder="Filter by word"
-                    pInputText 
-                    (input)="dt.filter($event.target.value, 'text', 'contains')">
-            </th>
-            <th>
-                <input
-                    value="{{filters.translation?.value}}"
-                    placeholder="Filter by translation"
-                    pInputText 
-                    (input)="dt.filter($event.target.value, 'translation', 'contains')">
-            </th>
-            <th>
-                <p-dropdown
-                    [autoWidth]="false"
-                    [options]="[{ txt: '-' }, { txt: 'yes', val: true }, { txt: 'no', val: false }]"
-                    optionLabel="txt"
-                    [ngModel]="filters.repeat?.value"
-                    (ngModelChange)="dt.filter($event, 'repeat', 'equals')">
-                </p-dropdown>
-            </th>
-            <th></th>
-            <th></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-word>
-        <tr>
-            <td [title]="word.text">
-              <div class="text-overflow">{{word.text}}</div>
-            </td>
-            <td [title]="word.translation">
-              <div class="text-overflow">{{word.translation}}</div>
-            </td>
-            <td>
-              <div class="text-overflow">{{word.repeat == 1? 'yes': 'no'}}</div>
-            </td>
-            <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
-              <div class="text-overflow">{{word.createdAtRelative}}</div>
-            </td>
-            <td class="text-right">
-                <p-button
-                    icon="fa fa-fw fa-language"
-                    title="Open in Google translate"
-                    styleClass="ui-button-secondary"
-                    [mwOpenExternal]="word.googleTranslateLink">
-                </p-button>
-                <p-button
-                    icon="fa fa-fw fa-picture-o"
-                    title="Open in Google images"
-                    styleClass="ui-button-secondary"
-                    [mwOpenExternal]="word.googleImagesLink">
-                </p-button>
-                <p-button
-                    icon="fa fa-fw fa-edit"
-                    title="Edit word"
-                    styleClass="ui-button-secondary"
-                    (onClick)="onWordEdit(word)">
-                </p-button>
-                <p-button
-                    title="Delete word" 
-                    icon="fa fa-fw fa-trash-o"
-                    styleClass="ui-button-secondary"
-                    (onClick)="onWordDelete(word)">
-                </p-button>
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-        <tr>
-            <td colspan="5">No words</td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-        <span class="total">Total words: {{paging.total}}</span>
+  [value]="words" 
+  [loading]="loading" 
+  loadingIcon="fa-spinner" 
+  [lazy]="true" 
+  [paginator]="true" 
+  [first]="paging.skip"
+  [rows]="paging.limit" 
+  [totalRecords]="paging.total" 
+  [filters]="filters" 
+  (onFilter)="onFilterChange($event)" 
+  (onPage)="onPageChange($event)"
+  #dt>
+
+  <!-- Header -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Word</th>
+      <th>Translation</th>
+      <th style="width: 70px;">Repeat</th>
+      <th style="width: 200px;">Date</th>
+      <th style="width: 160px;"></th>
+    </tr>
+    <tr>
+      <th>
+        <input 
+          value="{{filters.text?.value}}" 
+          placeholder="Filter by word" 
+          pInputText 
+          (input)="dt.filter($event.target.value, 'text', 'contains')">
+      </th>
+      <th>
+        <input 
+          value="{{filters.translation?.value}}" 
+          placeholder="Filter by translation" 
+          pInputText 
+          (input)="dt.filter($event.target.value, 'translation', 'contains')">
+      </th>
+      <th>
+        <p-dropdown 
+          [autoWidth]="false" 
+          [options]="[{ txt: '-' }, { txt: 'yes', val: true }, { txt: 'no', val: false }]" 
+          optionLabel="txt"
+          [ngModel]="filters.repeat?.value" 
+          (ngModelChange)="dt.filter($event, 'repeat', 'equals')">
+        </p-dropdown>
+      </th>
+      <th></th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <!-- Body -->
+  <ng-template pTemplate="body" let-word>
+    <tr>
+      <td [title]="word.text">
+        <div class="text-overflow">{{word.text}}</div>
+      </td>
+      <td [title]="word.translation">
+        <div class="text-overflow">{{word.translation}}</div>
+      </td>
+      <td>
+        <div class="text-overflow">{{word.repeat == 1? 'yes': 'no'}}</div>
+      </td>
+      <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
+        <div class="text-overflow">{{word.createdAtRelative}}</div>
+      </td>
+      <td class="text-right">
         <p-button 
-            label="Add word(s)" 
-            icon="fa fa-fw fa-plus" 
-            (click)="onWordAdd()">
+          icon="fa fa-fw fa-language" 
+          title="Open in Google translate" 
+          styleClass="ui-button-secondary" 
+          [mwOpenExternal]="word.googleTranslateLink">
         </p-button>
-    </ng-template>
+        <p-button 
+          icon="fa fa-fw fa-picture-o" 
+          title="Open in Google images" 
+          styleClass="ui-button-secondary" 
+          [mwOpenExternal]="word.googleImagesLink">
+        </p-button>
+        <p-button 
+          icon="fa fa-fw fa-edit" 
+          title="Edit word" 
+          styleClass="ui-button-secondary" 
+          (onClick)="onWordEdit(word)">
+        </p-button>
+        <p-button 
+          title="Delete word" 
+          icon="fa fa-fw fa-trash-o" 
+          styleClass="ui-button-secondary" 
+          (onClick)="onWordDelete(word)">
+        </p-button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <!-- Empty message -->
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5">No words</td>
+    </tr>
+  </ng-template>
+
+  <!-- Summary -->
+  <ng-template pTemplate="summary">
+    <span class="total">Total words: {{paging.total}}</span>
+    <p-button 
+      label="Add word(s)" 
+      icon="fa fa-fw fa-plus" 
+      (click)="onWordAdd()">
+    </p-button>
+  </ng-template>
+
 </p-table>
 
 <!-- Delete word confirm -->

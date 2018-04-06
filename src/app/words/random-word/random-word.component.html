@@ -1,38 +1,38 @@
 <div class="word-details" *ngIf="word">
-    <div class="word">
-        {{word.text}}
-    </div>
-    <div class="word-hint" *ngIf="hint">
-        {{word.translation}}
-    </div>
-    <div class="word-actions">
-        <p-button 
-            *ngIf="word.translation"
-            icon="fa fa-fw fa-question-circle-o"
-            styleClass="ui-button-secondary"
-            title="{{hint? 'Hide': 'Show'}} hint"
-            (onClick)="hint = !hint">
-        </p-button>
-        <p-button
-            icon="fa fa-fw fa-language"
-            title="Open in Google translate"
-            class="ui-button-secondary"
-            styleClass="ui-button-secondary"
-            [mwOpenExternal]="word.googleTranslateLink">
-        </p-button>
-        <p-button
-            icon="fa fa-fw fa-picture-o"
-            title="Open in Google images"
-            styleClass="ui-button-secondary"
-            [mwOpenExternal]="word.googleImagesLink">
-        </p-button>
-    </div>
+  <div class="word">
+    {{word.text}}
+  </div>
+  <div class="word-hint" *ngIf="hint">
+    {{word.translation}}
+  </div>
+  <div class="word-actions">
+    <p-button 
+      *ngIf="word.translation" 
+      icon="fa fa-fw fa-question-circle-o" 
+      styleClass="ui-button-secondary" 
+      title="{{hint? 'Hide': 'Show'}} hint"
+      (onClick)="hint = !hint">
+    </p-button>
+    <p-button 
+      icon="fa fa-fw fa-language" 
+      title="Open in Google translate" 
+      class="ui-button-secondary" 
+      styleClass="ui-button-secondary"
+      [mwOpenExternal]="word.googleTranslateLink">
+    </p-button>
+    <p-button 
+      icon="fa fa-fw fa-picture-o" 
+      title="Open in Google images" 
+      styleClass="ui-button-secondary" 
+      [mwOpenExternal]="word.googleImagesLink">
+    </p-button>
+  </div>
 </div>
 
 <p-button 
-    icon="fa fa-random" 
-    label="Next word"
-    (onClick)="onNextWord()">
+  icon="fa fa-random" 
+  label="Next word" 
+  (onClick)="onNextWord()">
 </p-button>
 
 <mw-loader [visible]="loading" [expand]="true"></mw-loader>
