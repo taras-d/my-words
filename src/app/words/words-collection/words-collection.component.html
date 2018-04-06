@@ -50,11 +50,17 @@
     </ng-template>
     <ng-template pTemplate="body" let-word>
         <tr>
-            <td class="text-break">{{word.text}}</td>
-            <td class="text-break">{{word.translation}}</td>
-            <td>{{word.repeat == 1? 'yes': 'no'}}</td>
+            <td [title]="word.text">
+              <div class="text-overflow">{{word.text}}</div>
+            </td>
+            <td [title]="word.translation">
+              <div class="text-overflow">{{word.translation}}</div>
+            </td>
+            <td>
+              <div class="text-overflow">{{word.repeat == 1? 'yes': 'no'}}</div>
+            </td>
             <td [title]="word.updatedAt|date: 'dd.MM.yyy HH:mm:ss'">
-                {{word.createdAtRelative}}
+              <div class="text-overflow">{{word.createdAtRelative}}</div>
             </td>
             <td class="text-right">
                 <p-button

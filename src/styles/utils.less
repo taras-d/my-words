@@ -1,9 +1,26 @@
 .text-right {
     text-align: right;
 }
+
 .text-left {
     text-align: left;
 }
+
 .text-break {
     word-break: break-word;
+}
+
+.text-overflow {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0px;
+    bottom: 0;
+    width: 30px;
+    background-image: linear-gradient(to right, transparent, white);
+  }
 }
