@@ -2,84 +2,84 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 export interface Method {
-    create: (...params: any[]) => Observable<any>;
-    done?: (result: any, ...params: any[]) => void;
-    fail?: (error: any, ...params: any[]) => void;
+  create: (...params: any[]) => Observable<any>;
+  done?: (result: any, ...params: any[]) => void;
+  fail?: (error: any, ...params: any[]) => void;
 }
 
 export interface Options {
-    done?: (name: string, result: any, ...params: any[]) => void;
-    fail?: (name: string, error: any, ...params: any[]) => void;
+  done?: (name: string, result: any, ...params: any[]) => void;
+  fail?: (name: string, error: any, ...params: any[]) => void;
 }
 
 export class RequestHelper {
 
-    private methods: { [key: string]: Method } = {};
+  private methods: { [key: string]: Method } = {};
 
-    private subs: { [key: string]: Subscription} = {};
+  private subs: { [key: string]: Subscription } = {};
 
-    constructor(private options?: Options) {
+  constructor(private options?: Options) {
 
+  }
+
+  method(name: string, method: Method): void {
+    const { methods } = this;
+
+    if (name in methods) {
+      throw new Error(`Method with name "${name}" already defined`);
     }
 
-    method(name: string, method: Method): void {
-        const { methods } = this;
+    methods[name] = method;
+  }
 
-        if (name in methods) {
-            throw new Error(`Method with name "${name}" already defined`);
-        }
+  invoke(name: string, ...params: any[]): void {
+    const method = this.methods[name];
 
-        methods[name] = method;
+    if (!method) {
+      throw new Error(`Method with name "${name}" is not defined`);
     }
 
-    invoke(name: string, ...params: any[]): void {
-        const method = this.methods[name];
+    // Cancel previous request
+    this.cancel(name);
 
-        if (!method) {
-            throw new Error(`Method with name "${name}" is not defined`);
-        }
+    // Emit `create` event
+    const obs = method.create(...params);
 
-        // Cancel previous request
-        this.cancel(name);
-
-        // Emit `create` event
-        const obs = method.create(...params);
-
-        if (!(obs instanceof Observable)) {
-            throw new Error('Create should return Observable');
-        }
-
-        const options = this.options || {};
-
-        this.subs[name] = obs.subscribe(
-            result => {
-                // Call `done` event
-                this.callEvent(method.done, result, ...params);
-                this.callEvent(options.done, name, result, ...params);
-            },
-            error => {
-                // Call `fail` event
-                this.callEvent(method.fail, error, ...params);
-                this.callEvent(options.fail, name, error, ...params);
-            }
-        );
+    if (!(obs instanceof Observable)) {
+      throw new Error('Create should return Observable');
     }
 
-    cancel(name: string): void {
-        const sub = this.subs[name];
-        if (sub instanceof Subscription) {
-            sub.unsubscribe();
-        }
-    }
+    const options = this.options || {};
 
-    cancelAll(): void {
-        Object.keys(this.subs).forEach(name => this.cancel(name));
-    }
+    this.subs[name] = obs.subscribe(
+      result => {
+        // Call `done` event
+        this.callEvent(method.done, result, ...params);
+        this.callEvent(options.done, name, result, ...params);
+      },
+      error => {
+        // Call `fail` event
+        this.callEvent(method.fail, error, ...params);
+        this.callEvent(options.fail, name, error, ...params);
+      }
+    );
+  }
 
-    private callEvent(fn: Function, ...args: any[]): void {
-        if (typeof fn === 'function') {
-            fn(...args);
-        }
+  cancel(name: string): void {
+    const sub = this.subs[name];
+    if (sub instanceof Subscription) {
+      sub.unsubscribe();
     }
+  }
+
+  cancelAll(): void {
+    Object.keys(this.subs).forEach(name => this.cancel(name));
+  }
+
+  private callEvent(fn: Function, ...args: any[]): void {
+    if (typeof fn === 'function') {
+      fn(...args);
+    }
+  }
 
 }
