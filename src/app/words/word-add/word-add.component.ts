@@ -84,9 +84,11 @@ export class WordAddComponent implements OnDestroy {
         repeat: false
       })
     );
+
     setTimeout(() => {
-      const el = this.wordsList.nativeElement;
-      el.scrollTop = el.scrollHeight;
+      const list = this.wordsList.nativeElement;
+      list.scrollTop = list.scrollHeight;
+      list.querySelector('li:last-child textarea[name="text"]').focus();
     });
   }
 
