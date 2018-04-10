@@ -98,10 +98,15 @@ export class WordsService {
 
   getRandomWord(): Observable<Word> {
     const sql = 'SELECT * FROM words ORDER BY RANDOM() LIMIT 1';
+    
     return this.toObs(this.db.sequelize.query(sql)).map((response: any) => {
       const word = response[0][0] || null;
-      word.googleTranslateLink = getGoogleTranslateLink(word.text);
-      word.googleImagesLink = getGoogleImagesLink(word.text);
+
+      if (word) {
+        word.googleTranslateLink = getGoogleTranslateLink(word.text);
+        word.googleImagesLink = getGoogleImagesLink(word.text);
+      }
+
       return word;
     });
   }
