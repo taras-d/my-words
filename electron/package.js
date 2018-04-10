@@ -24,7 +24,8 @@ const ignore = [
 const options = {
   dir: workDir,
   out: path.join(workDir, 'build'),
-  overwrite: true
+  overwrite: true,
+  icon: path.join(workDir, 'src/app-icon.ico')
 };
 
 const removeUselessFiles = appPath => {
