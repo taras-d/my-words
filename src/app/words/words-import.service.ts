@@ -9,8 +9,8 @@ import { nodeRequire, trimValues } from '../core/utils';
 import { DBService, DBConnection } from '../core/db.service';
 import { Word } from './words.service';
 
-const { ipcRenderer, remote } = nodeRequire('electron'),
-  fs = nodeRequire('fs');
+const { ipcRenderer, remote } = nodeRequire('electron');
+const fs = nodeRequire('fs');
 
 @Injectable()
 export class WordsImportService {
@@ -134,7 +134,12 @@ export class WordsImportService {
   private exportWords(path: string): void {
     this.zone.run(() => this.events.next('import'));
 
-    const getAllWords = this.db.words.findAll({ raw: true });
+    const getAllWords = this.db.words.findAll({ 
+      raw: true,
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
 
     Observable.fromPromise(getAllWords).mergeMap((words: any) => {
       const writeFile = Observable.bindNodeCallback(fs.writeFile) as any;
